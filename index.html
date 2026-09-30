@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>审计智能应用 · 原型</title>
-  <link rel="stylesheet" href="assets/app.css" />
+  <link rel="stylesheet" href="assets/app.css?v=1602" />
 </head>
 <body>
   <div class="app">
@@ -18,6 +18,7 @@
       </div>
       <nav class="nav">
         <button class="nav-btn active" data-view="workbench">智能工作台</button>
+        <button class="nav-btn" data-view="regulate">AI风控预警监管平台</button>
         <button class="nav-btn" data-view="assistant">协审智能助手</button>
         <button class="nav-btn" data-view="apps">智能专项应用</button>
         <button class="nav-btn" data-view="tools">智能通用工具</button>
@@ -25,9 +26,9 @@
       </nav>
       <div class="top-actions">
         <select class="project-switch" aria-label="当前项目">
-          <option>当前项目：XX 市 2025 预算执行审计</option>
-          <option>XX 集团党委书记经济责任审计</option>
-          <option>轨道交通 3 号线投资审计</option>
+          <option>当前项目：XX 集团 2025 企业预算执行审计</option>
+          <option>XX 集团专项预算执行审计</option>
+          <option>建设板块预算支出延伸审计</option>
         </select>
         <input class="search" placeholder="检索项目 / 疑点 / 法规" />
         <button class="icon-btn" title="消息" type="button">
@@ -86,22 +87,16 @@
             <p>专项模型与发现事项闭环。</p>
             <div class="foot"><span>专项</span><span>进入 →</span></div>
           </article>
-          <article class="app-card" data-view="app-data">
-            <div class="app-ico">析</div>
-            <h3>智能分析</h3>
-            <p>数据资产、模型与选数。</p>
-            <div class="foot"><span>分析</span><span>进入 →</span></div>
-          </article>
           <article class="app-card" data-view="app-knowledge">
             <div class="app-ico">库</div>
             <h3>知识智库</h3>
-            <p>事项库、法规、问题与案例。</p>
+            <p>法规条款、项目资料与事项案例一体问答。</p>
             <div class="foot"><span>知识</span><span>进入 →</span></div>
           </article>
-          <article class="app-card" data-view="assistant" data-scene="talkdata">
+          <article class="app-card" data-view="app-data">
             <div class="app-ico">数</div>
             <h3>智能问数</h3>
-            <p>自然语言取数、抽样与多维对比。</p>
+            <p>对话取数、抽样与多维对比。</p>
             <div class="foot"><span>问数</span><span>进入 →</span></div>
           </article>
         </div>
@@ -115,21 +110,21 @@
             <div class="card-bd">
               <div class="project">
                 <div>
-                  <h3>XX 市 2025 年度财政预算执行审计 <span class="tag doing">实施中</span></h3>
+                  <h3>XX 集团 2025 年度企业预算执行审计 <span class="tag doing">实施中</span></h3>
                   <div class="meta"><span>主审 hong</span><span>现场 9/12</span><span>疑点 14</span></div>
                   <div class="progress"><i style="width:62%"></i></div>
                 </div>
               </div>
               <div class="project">
                 <div>
-                  <h3>XX 集团党委书记经济责任审计 <span class="tag risk">高关注</span></h3>
-                  <div class="meta"><span>协同 4 人</span><span>履职事项 36</span><span>待取证 8</span></div>
+                  <h3>XX 集团专项预算执行审计 <span class="tag risk">高关注</span></h3>
+                  <div class="meta"><span>协同 4 人</span><span>专项事项 36</span><span>待取证 8</span></div>
                   <div class="progress"><i style="width:41%"></i></div>
                 </div>
               </div>
               <div class="project">
                 <div>
-                  <h3>轨道交通 3 号线投资审计 <span class="tag warn">待资料</span></h3>
+                  <h3>建设板块预算支出延伸审计 <span class="tag warn">待资料</span></h3>
                   <div class="meta"><span>合同包 128</span><span>变更 23</span><span>进度 28%</span></div>
                   <div class="progress"><i style="width:28%"></i></div>
                 </div>
@@ -150,8 +145,8 @@
               <div class="todo">
                 <div class="check"></div>
                 <div>
-                  <h4>复核经责项目决策会议纪要</h4>
-                  <p>2023-2025 三重一大 · 待关联资金流向</p>
+                  <h4>复核预算调剂会议纪要与依据</h4>
+                  <p>2025 年中调剂 · 待关联账务时点</p>
                 </div>
               </div>
               <div class="todo">
@@ -174,8 +169,8 @@
               </div>
               <div class="insight">
                 <div class="k">证据缺口</div>
-                <h4>经责事项 8 条缺少决策依据</h4>
-                <p>履职清单已自动标注「有资金、无纪要」，可一键生成取证清单。</p>
+                <h4>重点支出 8 条缺少完整依据</h4>
+                <p>支出清单已自动标注「有资金、无成果物/无批复」，可一键生成取证清单。</p>
               </div>
             </div>
           </article>
@@ -209,7 +204,7 @@
             </div>
           </article>
           <article class="card">
-            <div class="card-hd"><h2>项目作业节奏</h2><span class="tag doing">预算执行审计</span></div>
+            <div class="card-hd"><h2>项目作业节奏</h2><span class="tag doing">企业预算执行审计</span></div>
             <div class="card-bd">
               <div class="flow">
                 <div class="step done">审前调查</div>
@@ -226,45 +221,59 @@
         </div>
       </section>
 
+      <!-- AI风控预警监管平台 -->
+      <section class="view" id="regulate">
+        <div class="page-head">
+          <div>
+            <h1>AI风控预警监管平台</h1>
+            <p>面向穿透式监管的前瞻预警：按重点领域分块监测风险，支持多层穿透下钻；发现—预警—派单—闭环。</p>
+          </div>
+          <div>
+            <button class="btn ghost sm" type="button" data-regulate="home">总览</button>
+            <button class="btn gold sm" type="button" data-toast="已刷新全级次监测指标">刷新监测</button>
+          </div>
+        </div>
+        <div id="regulate-warn" class="regulate-warn-strip"></div>
+        <div id="regulate-crumbs" class="regulate-crumbs"></div>
+        <div id="regulate-body"></div>
+      </section>
+
       <!-- 协审智能助手 -->
       <section class="view" id="assistant">
         <div class="page-head">
           <div>
             <h1>协审智能助手</h1>
-            <p>按作业卡片进入。当前绑定「XX 市 2025 预算执行审计」。</p>
+            <p>按作业卡片进入。当前绑定「XX 集团 2025 企业预算执行审计」。</p>
           </div>
         </div>
 
         <div id="assist-home" class="assist-home">
           <h2 class="section-hd">计划与对象</h2>
           <div class="apps">
-            <article class="app-card scene" data-scene="detect"><div class="app-ico">检</div><h3>审计对象筛查</h3><p>检查下级单位应安排专项、安全、经责、工程审计或内控监督评价等。</p><div class="foot"><span>计划</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="plan"><div class="app-ico">计</div><h3>计划制定</h3><p>把检测结果编成年度计划：对象、类型、时间与组长。</p><div class="foot"><span>计划</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="detect"><div class="app-ico">检</div><h3>审计对象筛查</h3><p>检查下级企业应安排企业预算执行、专项、安全、工程审计或内控监督评价等。</p><div class="foot"><span>计划</span><span>进入 →</span></div></article>
           </div>
           <h2 class="section-hd">政策与应对</h2>
           <div class="apps">
             <article class="app-card scene" data-scene="policy"><div class="app-ico">政</div><h3>政策解读</h3><p>解读现行政策，给出审计安排与数据分析应对。</p><div class="foot"><span>政策</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="law"><div class="app-ico">法</div><h3>法规与政策检索</h3><p>匹配法规条款，并解释定性口径，供底稿与报告引用。</p><div class="foot"><span>检索</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="mmsearch"><div class="app-ico">搜</div><h3>资料智搜</h3><p>跨文本、表格、影像与录音召回项目资料。</p><div class="foot"><span>智搜</span><span>进入 →</span></div></article>
+            <article class="app-card" data-view="app-knowledge"><div class="app-ico">库</div><h3>知识智库</h3><p>法规条款、项目资料与事项案例一体问答。</p><div class="foot"><span>知识</span><span>进入 →</span></div></article>
             <article class="app-card scene" data-scene="icmatrix"><div class="app-ico">矩</div><h3>内控矩阵</h3><p>导入内控手册与制度，抽取控制域、控制点，形成可评价矩阵。</p><div class="foot"><span>内控</span><span>进入 →</span></div></article>
           </div>
-          <h2 class="section-hd">项目驾驶舱</h2>
+          <h2 class="section-hd">项目工作台</h2>
           <div class="apps">
-            <article class="app-card scene" data-scene="cockpit"><div class="app-ico">舱</div><h3>项目驾驶舱</h3><p>按阶段查看五个智能体及现场作业进度。</p><div class="foot"><span>总览</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="survey"><div class="app-ico">前</div><h3>审前调查智能体</h3><p>对象摸底、资料缺口与调查报告。</p><div class="foot"><span>已完成</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="cockpit"><div class="app-ico">台</div><h3>项目工作台</h3><p>上方保留阶段流程（含疑点/取证/底稿数量），下方对话统筹进度与跳转。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="survey"><div class="app-ico">前</div><h3>审前调查智能体</h3><p>资料、画像、调查记录与问卷，生成含疑点的报告。</p><div class="foot"><span>已完成</span><span>进入 →</span></div></article>
             <article class="app-card scene" data-scene="scheme"><div class="app-ico">方</div><h3>方案制定智能体</h3><p>汇集审前调查、项目资料、历史方案与方案库，结合实施方案编制。</p><div class="foot"><span>已完成</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="doubt"><div class="app-ico">疑</div><h3>疑点确认智能体</h3><p>待确认疑点、穿行路径、比对穿透与询问函建议。</p><div class="foot"><span>进行中</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="evidence"><div class="app-ico">证</div><h3>证据链管理</h3><p>资料、疑点、底稿、报告四段闭环。</p><div class="foot"><span>待启动</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="paper"><div class="app-ico">稿</div><h3>底稿编写智能体</h3><p>按目录灌入事实、法规与意见。</p><div class="foot"><span>待启动</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="report"><div class="app-ico">报</div><h3>报告生成智能体</h3><p>发现事项、定性润色、整改建议与 Word 草稿。</p><div class="foot"><span>待启动</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="fieldpack"><div class="app-ico">包</div><h3>项目资料包</h3><p>资料清单、访谈提纲、整改通知一并导出。</p><div class="foot"><span>资料</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="draft"><div class="app-ico">证</div><h3>取证单撰写</h3><p>把已确认疑点写成取证单。</p><div class="foot"><span>取证</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="interview"><div class="app-ico">访</div><h3>访谈智能体</h3><p>起草访谈提纲，转写纪要、提取决议与待办。</p><div class="foot"><span>访谈</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="complete"><div class="app-ico">全</div><h3>问题完整性检查</h3><p>核对疑点是否入报告、证据与定性是否闭合。</p><div class="foot"><span>报告</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="doubt"><div class="app-ico">引</div><h3>审计指引智能体</h3><p>方案事项树、本下级内容、疑点个数与明细（已确认问题 / 无问题 / 待确认）。</p><div class="foot"><span>进行中</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="draft"><div class="app-ico">证</div><h3>发现取证智能体</h3><p>整理已确认发现并撰写取证单。</p><div class="foot"><span>取证</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="interview"><div class="app-ico">访</div><h3>访谈智能体</h3><p>按企业预算执行审计对话起草提纲、转写纪要、提取待办。</p><div class="foot"><span>访谈</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="paper"><div class="app-ico">稿</div><h3>底稿智能体</h3><p>撰写指引与质量检查：做什么、查什么、要什么资料；检查定性与资料深度。</p><div class="foot"><span>底稿</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="report"><div class="app-ico">报</div><h3>报告生成智能体</h3><p>按项目底稿问题生成审计报告，并检查报告内容完整性。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="fieldpack"><div class="app-ico">资</div><h3>项目资料</h3><p>对话管理资料清单、缺件催收、访谈提纲与整改通知。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="evidence"><div class="app-ico">证</div><h3>证据链管理</h3><p>资料、疑点、底稿、报告四段闭环。</p><div class="foot"><span>未进行</span><span>进入 →</span></div></article>
           </div>
           <h2 class="section-hd">问数</h2>
           <div class="apps">
-            <article class="app-card scene" data-scene="talkdata"><div class="app-ico">数</div><h3>问数</h3><p>自然语言取数、分层抽样与差异估计，可下钻选数车。</p><div class="foot"><span>问数</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="talkdata"><div class="app-ico">数</div><h3>问数</h3><p>对话取数、分层抽样与差异估计。</p><div class="foot"><span>问数</span><span>进入 →</span></div></article>
           </div>
         </div>
 
@@ -276,6 +285,8 @@
                 <h2 id="pane-title">审计对象筛查</h2>
               </div>
               <div class="hd-actions">
+                <button class="btn teal sm" id="doubt-ai-btn" type="button" hidden>疑点分析AI</button>
+                <button class="btn gold sm" id="paper-gen-btn" type="button" hidden>生成底稿</button>
                 <button class="btn ghost sm" id="pane-extra" type="button" data-toast="已保存至项目知识库">存入项目</button>
               </div>
             </div>
@@ -334,8 +345,8 @@
 
             <div class="pane" data-pane="policy">
               <div class="pane-scroll" id="policy-index">
-                <p class="pane-lead" id="policy-lead">点进政策看解读与应对。法规条款检索、资料智搜请用各自入口。</p>
-                <div class="policy-cards" id="policy-list"></div>
+                <p class="pane-lead" id="policy-lead">点进政策看解读；同类政策有整体应对。法规与资料检索请用工作台「知识智库」。</p>
+                <div class="policy-list" id="policy-list"></div>
               </div>
               <div class="pane-scroll" id="policy-read" hidden></div>
             </div>
@@ -377,44 +388,14 @@
             </div>
 
             <div class="pane" data-pane="cockpit">
-              <div class="pane-scroll">
-                <p class="pane-lead">项目驾驶舱按审计阶段编排。抽样与证据链是现场作业阶段，报告生成只负责组装草稿。</p>
-                <div class="cockpit-pipe">
-                  <button class="pipe-step done" type="button" data-scene="survey"><b>审前调查</b><span>已完成</span></button>
-                  <button class="pipe-step done" type="button" data-scene="scheme"><b>方案制定</b><span>已完成</span></button>
-                  <button class="pipe-step now" type="button" data-scene="doubt"><b>疑点确认</b><span>进行中</span></button>
-                  <button class="pipe-step" type="button" data-scene="talkdata"><b>问数 / 抽样</b><span>待启动</span></button>
-                  <button class="pipe-step" type="button" data-scene="evidence"><b>证据链</b><span>待启动</span></button>
-                  <button class="pipe-step" type="button" data-scene="paper"><b>底稿编写</b><span>待启动</span></button>
-                  <button class="pipe-step" type="button" data-scene="report"><b>报告生成</b><span>待启动</span></button>
-                </div>
-                <div class="cockpit-cards" id="cockpit-cards">
-                  <article class="cockpit-card">
-                    <h4>审前调查智能体 <span class="tag ok">已完成</span></h4>
-                    <p>输入：检测结果 3 家 · 政策解读 2 份。已形成调查报告，建议住建局作工程主延伸、教育局作内控评价对象。</p>
-                    <button class="btn sm" type="button" data-scene="survey">打开智能体</button>
-                  </article>
-                  <article class="cockpit-card">
-                    <h4>方案制定智能体 <span class="tag ok">已完成</span></h4>
-                    <p>输入：审前调查、项目资料、历史方案与方案库，叠加当前实施方案后汇编。</p>
-                    <button class="btn sm" type="button" data-scene="scheme">打开智能体</button>
-                  </article>
-                  <article class="cockpit-card">
-                    <h4>疑点确认智能体 <span class="tag warn">进行中</span></h4>
-                    <p>待确认 6 条：车站装修超概 12.6%、运维缺成果物 154 万、食堂与运维商疑似同一实控。</p>
-                    <button class="btn sm" type="button" data-scene="doubt">打开智能体</button>
-                  </article>
-                  <article class="cockpit-card">
-                    <h4>底稿编写智能体 <span class="tag">待启动</span></h4>
-                    <p>输入：已确认疑点与取证单。可按目录灌入事实、法规与审计意见栏。</p>
-                    <button class="btn sm" type="button" data-scene="paper">打开智能体</button>
-                  </article>
-                  <article class="cockpit-card">
-                    <h4>报告生成智能体 <span class="tag">待启动</span></h4>
-                    <p>输入：已审核底稿。输出发现事项骨架，并可在本页润色定性用语。</p>
-                    <button class="btn sm" type="button" data-scene="report">打开智能体</button>
-                  </article>
-                </div>
+              <div class="cockpit-top">
+                <p class="pane-lead">项目工作台按审计阶段编排。点上方阶段可进入对应智能体；下方用对话统筹进度与下一步。</p>
+                <div class="cockpit-pipe" id="cockpit-pipe"></div>
+              </div>
+              <div class="msgs cockpit-msgs" id="cockpit-msgs"></div>
+              <div class="composer pane-bar">
+                <textarea id="cockpit-ask" placeholder="例如：当前卡在哪一阶段？下一步怎么推进？打开审计指引 / 项目资料"></textarea>
+                <button class="btn teal" id="cockpit-send" type="button">发送</button>
               </div>
             </div>
 
@@ -422,7 +403,7 @@
               <div class="pane-scroll" id="agent-workspace">
                 <p class="pane-lead">审前调查智能体 · 已完成。输入来自审计对象筛查与政策解读。</p>
                 <div class="result-block"><h4>本阶段输入</h4>检测结果 3 家 · 政策解读 2 份 · 单位画像摘要</div>
-                <div class="result-block"><h4>审前调查报告（摘要）</h4>建议将市住建局作为工程审计主延伸对象，市教育局作为内控评价对象。已梳理组织架构、资金规模、在建项目与历史问题 14 条。</div>
+                <div class="result-block"><h4>审前调查报告（摘要）</h4>建议将城投建设公司作为工程审计主延伸对象，城投信息公司作为内控评价对象。已梳理组织架构、资金规模、在建项目与历史问题 14 条。</div>
                 <div class="result-block"><h4>资料缺口</h4>变更签证台账、内控自评底稿、运维成果物清单尚未齐备，已生成资料清单。</div>
               </div>
               <div class="composer pane-bar">
@@ -434,8 +415,10 @@
 
             <div class="pane" data-pane="gen-report">
               <div class="pane-scroll">
-                <p class="pane-lead">汇集已确认发现，润色定性用语，生成整改建议并导出 Word 草稿。</p>
+                <p class="pane-lead">汇集已确认发现，润色定性用语，核对问题完整性，生成整改建议并导出 Word 草稿。</p>
                 <div class="result-block"><h4>本阶段输入</h4>已审核底稿 · 证据链已闭环事项</div>
+                <div class="result-block"><h4>问题完整性</h4>疑点库 14 条，报告已写入 9 条。食堂关联采购、循环贸易 1,860 万尚未入报告。</div>
+                <div class="result-block"><h4>闭合缺口</h4>2 段定性缺法规引用，1 段缺取证单编号。补齐后再导出草稿。</div>
                 <div class="result-block">
                   <h4>发现清册</h4>
                   <table>
@@ -450,12 +433,12 @@
                 <div class="result-block">
                   <h4>一、审计发现</h4>
                   （一）部分信息化运维支出缺少成果物，支出真实性存疑，涉及金额 154 万元。<br />
-                  （二）经济责任审计对象任职期间对外投资决策依据不完整，涉及金额 1,200 万元。<br />
+                  （二）大额支出预算安排与决策依据不完整，涉及金额 1,200 万元。<br />
                   （三）3 号线车站装修变更累计超概 12.6%，审批链不完整。
                 </div>
                 <div class="result-block">
                   <h4>二、定性与依据（待主审确认）</h4>
-                  建议分别对照政府采购、内控及「三重一大」决策制度。默认稳妥口径：审批手续不完整、内控运行不到位；可改为较强定性。
+                  建议分别对照集团采购、内控及全面预算管理相关规定。默认稳妥口径：审批手续不完整、内控运行不到位；可改为较强定性。
                   <div style="margin-top:8px">
                     <button class="btn ghost sm" type="button" data-toast="已按稳妥口径改写定性用语">应用稳妥口径</button>
                     <button class="btn ghost sm" type="button" data-toast="已按较强口径改写定性用语">应用较强口径</button>
@@ -465,77 +448,36 @@
                   <h4>三、整改建议</h4>
                   <p>运维成果物缺失：建议限期补交巡检报告与成果物清单，并修订合同验收条款。评估：资料补齐后可降为管理不规范。</p>
                   <p>内控缺陷未整改：建议将 11 项缺陷纳入下一轮评价计划，未闭环不得评为有效。评估：与预算绩效挂钩。</p>
-                  <div style="margin-top:8px"><button class="btn ghost sm" type="button" data-scene="fieldpack">并入项目资料包</button></div>
+                  <div style="margin-top:8px"><button class="btn ghost sm" type="button" data-scene="fieldpack">并入项目资料</button></div>
                 </div>
                 <div class="result-block">
                   <h4>附件与输出</h4>
                   发现事项清册、取证单索引、法规引用表。支持导出 Word 草稿。
                   <div style="margin-top:8px">
                     <button class="btn sm" type="button" data-toast="已导出 Word 草稿">导出草稿</button>
-                    <button class="btn ghost sm" type="button" data-scene="cockpit">回驾驶舱</button>
+                    <button class="btn ghost sm" type="button" data-scene="cockpit">回项目工作台</button>
                   </div>
                 </div>
               </div>
               <div class="composer pane-bar">
                 <span class="muted">当前：报告生成智能体</span>
                 <button class="btn ghost sm" type="button" data-scene="paper">上一阶段</button>
-                <button class="btn teal" type="button" data-scene="cockpit">回驾驶舱</button>
+                <button class="btn teal" type="button" data-scene="evidence">进入证据链</button>
               </div>
             </div>
 
             <div class="pane" data-pane="trace">
-              <div class="pane-scroll">
-                <p class="pane-lead">确认疑点、梳理穿行路径，再沿资金流、关联关系与时间轴做比对穿透，结论可写入证据链。</p>
-                <div class="result-block"><h4>本阶段输入</h4>方案重点事项 · 问数结果 · 合同与凭证抽核</div>
-                <div class="result-block">
-                  <h4>待确认疑点 6 条</h4>
-                  车站装修变更超概 12.6%；信息化运维缺成果物 154 万；食堂供应商与中标运维商疑似同一实控。高风险 2 条建议发询问函。
-                </div>
-                <div class="result-block">
-                  <h4>穿行三条线</h4>
-                  调剂：核对预算调整文件、批复时点与账务是否一致。<br />
-                  真实性：对会议费、培训费、信息化运维抽凭，核合同与成果物。<br />
-                  绩效：选取专项资金，核目标、监控、评价是否闭环。
-                </div>
-                <div class="stat-row">
-                  <div class="stat"><b>6</b><span>待确认 / 待穿透</span></div>
-                  <div class="stat"><b>3</b><span>已形成路径</span></div>
-                  <div class="stat"><b>2</b><span>需延伸取证</span></div>
-                </div>
-                <table>
-                  <thead><tr><th>疑点</th><th>穿透路径</th><th>结论</th><th></th></tr></thead>
-                  <tbody>
-                    <tr>
-                      <td>往来款互转 2,480 万</td>
-                      <td>市本级 → 海云信息 → 澜海商贸 → 回款</td>
-                      <td><span class="tag risk">体外循环迹象</span></td>
-                      <td><button class="btn ghost sm" type="button" data-view="app-supplier">关联分析</button></td>
-                    </tr>
-                    <tr>
-                      <td>运维费 154 万</td>
-                      <td>合同 → 列支 → 无巡检报告</td>
-                      <td><span class="tag warn">成果物缺失</span></td>
-                      <td><button class="btn ghost sm" type="button" data-scene="evidence">入证据链</button></td>
-                    </tr>
-                    <tr>
-                      <td>食堂配送 318 万</td>
-                      <td>中标人与运维商手机号撞库</td>
-                      <td><span class="tag risk">疑似同一实控</span></td>
-                      <td><button class="btn ghost sm" type="button" data-view="app-supplier">供应商关联</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <div class="pane-scroll" id="guide-pane"></div>
               <div class="composer pane-bar">
-                <span class="muted">当前：疑点确认智能体</span>
+                <span class="muted">当前：审计指引智能体</span>
                 <button class="btn ghost sm" type="button" data-scene="scheme">上一阶段</button>
-                <button class="btn teal" type="button" data-scene="sample">进入抽样统计</button>
+                <button class="btn teal" type="button" data-scene="draft">进入发现取证智能体</button>
               </div>
             </div>
 
             <div class="pane" data-pane="evidence">
               <div class="pane-scroll">
-                <p class="pane-lead">驾驶舱现场作业能力：资料、疑点、底稿、报告四段闭环。缺环项标红，便于主审补证。</p>
+                <p class="pane-lead">项目工作台现场作业能力：资料、疑点、底稿、报告四段闭环。缺环项标红，便于主审补证。</p>
                 <table>
                   <thead><tr><th>编号</th><th>事项</th><th>资料</th><th>疑点</th><th>底稿</th><th>报告</th></tr></thead>
                   <tbody>
@@ -576,14 +518,14 @@
               </div>
               <div class="composer pane-bar">
                 <span class="muted">当前：证据链管理</span>
-                <button class="btn ghost sm" type="button" data-scene="sample">上一阶段</button>
-                <button class="btn teal" type="button" data-scene="paper">进入底稿编写</button>
+                <button class="btn ghost sm" type="button" data-scene="report">上一阶段</button>
+                <button class="btn teal" type="button" data-scene="cockpit">回项目工作台</button>
               </div>
             </div>
 
             <div class="pane" data-pane="sample">
               <div class="pane-scroll">
-                <p class="pane-lead">驾驶舱现场作业能力：按科目、供应商或合同包分层抽样，输出样本清单与差异估计，异常样本可转疑点确认做穿透。</p>
+                <p class="pane-lead">项目工作台现场作业能力：按科目、供应商或合同包分层抽样，输出样本清单与差异估计，异常样本可转审计指引做穿透。</p>
                 <div class="stat-row">
                   <div class="stat"><b>128</b><span>总体（合同包）</span></div>
                   <div class="stat"><b>24</b><span>已抽样本</span></div>
@@ -610,71 +552,43 @@
               </div>
               <div class="composer pane-bar">
                 <span class="muted">当前：抽样与统计</span>
-                <button class="btn ghost sm" type="button" data-scene="doubt">上一阶段</button>
-                <button class="btn teal" type="button" data-scene="evidence">进入证据链</button>
+                <button class="btn ghost sm" type="button" data-scene="draft">上一阶段</button>
+                <button class="btn teal" type="button" data-scene="interview">进入访谈智能体</button>
               </div>
             </div>
 
             <div class="pane" data-pane="fieldpack">
               <div class="pane-scroll">
-                <p class="pane-lead">项目资料包：资料清单、访谈提纲、会议纪要待办与整改通知，可发给被审计单位。</p>
+                <p class="pane-lead">项目资料：资料清单、访谈提纲、会议纪要待办与整改通知，可发给被审计单位。</p>
                 <div class="result-block">
                   <h4>资料清单（住建局 / 工程审计）</h4>
                   在建项目台账、概算批复、招标文件、中标通知、变更签证、监理日志、结算送审稿。
                 </div>
                 <div class="result-block">
-                  <h4>访谈提纲（教育局 / 内控评价）</h4>
+                  <h4>访谈提纲（信息公司 / 内控评价）</h4>
                   内控自评缺陷未整改原因、采购授权链条、专项资金闲置责任人。
                 </div>
                 <div class="result-block">
                   <h4>访谈 / 会议纪要</h4>
-                  市住建局工程科称车站装修变更为现场签证、审批「事后补」，与监理日志日期矛盾 3 处。待办：补调变更审批单，与三重一大纪要交叉。
+                  城投建设公司工程部称车站装修变更为现场签证、审批「事后补」，与监理日志日期矛盾 3 处。待办：补调变更审批单，与预算安排及付款依据交叉。
                   <div style="margin-top:8px"><button class="btn ghost sm" type="button" data-view="app-meeting">打开会议纪要分析</button></div>
                 </div>
                 <div class="result-block">
                   <h4>整改通知草稿</h4>
                   就超概变更未履行审批、运维成果物缺失两项，要求 15 个工作日内书面说明并补证。
                   <div style="margin-top:8px">
-                    <button class="btn sm" type="button" data-toast="已导出项目资料包">导出资料包</button>
+                    <button class="btn sm" type="button" data-toast="已导出项目资料">导出资料</button>
                     <button class="btn ghost sm" type="button" data-scene="survey">回审前调查</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="pane" data-pane="law">
-              <div class="pane-scroll">
-                <p class="pane-lead">匹配法规与政策条款，并就定性口径提问，结果可写入底稿或报告。</p>
-                <div class="result-block">
-                  <h4>条款匹配 · 超概变更审批</h4>
-                  《政府投资条例》第十二条；政府投资项目审计监督通知关于变更控制。建议写入底稿法规栏，定性用「审批手续不完整」。
-                </div>
-                <div class="result-block">
-                  <h4>问审 · 超概 10% 如何定性？</h4>
-                  对照政府投资项目审计监督通知，建议表述为审批手续不完整，避免直接写违规。
-                </div>
-                <div class="result-block">
-                  <h4>可继续</h4>
-                  「三重一大缺纪要怎么写」「运维缺成果物用哪条制度」
-                </div>
-                <button class="btn sm" type="button" data-scene="paper">写入底稿</button>
-                <button class="btn ghost sm" type="button" data-scene="report">去报告生成</button>
-              </div>
-            </div>
-            <div class="pane" data-pane="complete">
-              <div class="pane-scroll">
-                <p class="pane-lead">核对疑点是否写入报告、证据与定性是否闭合。</p>
-                <div class="result-block"><h4>覆盖</h4>疑点库 14 条，报告已写入 9 条。食堂关联采购、循环贸易 1,860 万尚未入报告。</div>
-                <div class="result-block"><h4>缺口</h4>2 段定性缺法规引用，1 段缺取证单编号。</div>
-                <button class="btn sm" type="button" data-scene="report">回报告生成</button>
-                <button class="btn ghost sm" type="button" data-scene="complete">再核完整性</button>
-              </div>
-            </div>
             <div class="pane" data-pane="talkdata">
               <div class="pane-scroll">
                 <p class="pane-lead">用自然语言对数据卡片提问，并可按科目、供应商或合同包做分层抽样与差异估计。</p>
                 <div class="result-block"><h4>问：2026 年一季度销售收入按供应商排名</h4>已查询卡片 impstru_2026Q1Sales…（4,671 条）。前三：海云信息、澜海商贸、博远建设。</div>
-                <div class="result-block"><h4>可继续</h4>「加上关联方过滤」「只看工程域」<div style="margin-top:8px"><button class="btn sm" type="button" data-view="app-data">去选数</button></div></div>
+                <div class="result-block"><h4>可继续</h4>「加上关联方过滤」「只看工程域」</div>
                 <div class="stat-row">
                   <div class="stat"><b>128</b><span>总体（合同包）</span></div>
                   <div class="stat"><b>24</b><span>已抽样本</span></div>
@@ -702,41 +616,12 @@
             </div>
             <div class="pane" data-pane="interview">
               <div class="pane-scroll">
-                <p class="pane-lead">访谈智能体：起草提纲、转写录音、提取决议与待办，可回写项目资料包或会议纪要分析。</p>
-                <div class="result-block">
-                  <h4>访谈提纲 · 市住建局工程科</h4>
-                  变更审批时点、签证与监理日志是否一致、超概是否履行集体决策、事后补批的责任人。
-                </div>
-                <div class="result-block">
-                  <h4>访谈提纲 · 市教育局（内控评价）</h4>
-                  内控自评缺陷未整改原因、采购授权链条、专项资金闲置责任人。
-                </div>
-                <div class="result-block">
-                  <h4>访谈记录 · 市住建局工程科</h4>
-                  对方称车站装修变更为现场签证，审批「事后补」。已标注与监理日志日期矛盾 3 处。
-                </div>
-                <div class="result-block">
-                  <h4>待办</h4>
-                  补调变更审批单；与三重一大纪要交叉。
-                  <div style="margin-top:8px">
-                    <button class="btn sm" type="button" data-toast="提纲已写入项目资料包">写入资料包</button>
-                    <button class="btn ghost sm" type="button" data-view="app-meeting">打开会议纪要分析</button>
-                  </div>
-                </div>
+                <p class="pane-lead">访谈智能体已改为会话模式；请从智能体入口进入对话。</p>
               </div>
             </div>
-            <div class="pane" data-pane="mmsearch">
-              <div class="pane-scroll">
-                <p class="pane-lead">跨文本、表格、影像与录音的智搜，可从知识智库与项目资料同时召回。</p>
-                <div class="result-block"><h4>检索：超概变更审批</h4>命中：实施方案 3.2、政府投资项目审计通知、签证单-07（扫描件）、访谈录音 04:12。</div>
-                <button class="btn sm" type="button" data-view="app-knowledge">打开知识智库</button>
-                <button class="btn ghost sm" type="button" data-scene="law">法规条款</button>
-              </div>
-            </div>
-
             <div class="pane" data-pane="chat">
               <div class="msgs" id="msgs">
-                <div class="bubble ai">已加载组织架构、专项资金、在建工程与任期对象库。可先检测下级单位应安排哪类审计，再进入计划制定。</div>
+                <div class="bubble ai">已加载组织架构、专项资金、在建工程与预算单位指标库。可先检测下级单位应安排哪类审计，再进入计划制定。</div>
                 <div class="bubble user">围绕预算调剂和重点支出，给出本周现场实施要点，并列出需要被审计单位配合的资料。</div>
                 <div class="bubble ai">
                   建议本周按「调剂程序 — 支出真实性 — 绩效目标」三条线推进：
@@ -746,7 +631,7 @@
                     <li>绩效：选取 2 个专项资金，核目标、监控、评价报告是否形成闭环。</li>
                   </ul>
                   需配合资料：预算调整批复、科目明细账、合同及验收、专项绩效材料。
-                  <div class="cite">引用 · 预算法实施条例 第 33 条 · 项目方案 3.2</div>
+                  <div class="cite">引用 · 集团全面预算管理办法 第 33 条 · 项目方案 3.2</div>
                 </div>
               </div>
               <div class="composer">
@@ -766,7 +651,7 @@
             <div class="file"><span>内控自评缺陷台账</span><span class="tag ok">已接入</span></div>
             <div class="file"><span>在建工程与变更</span><span class="tag warn">部分</span></div>
             <h3 style="margin-top:16px">说明</h3>
-            <p style="font-size:12px;color:var(--muted);line-height:1.6;">按下级单位业务特征判断应安排专项、安全、经责、工程或内控监督评价。勾选后纳入计划制定。</p>
+            <p style="font-size:12px;color:var(--muted);line-height:1.6;">按下级企业业务特征判断应安排企业预算执行、专项、安全、工程或内控监督评价。勾选后纳入计划制定。</p>
           </aside>
         </div>
       </section>
@@ -776,70 +661,70 @@
         <div class="page-head">
           <div>
             <h1>智能专项应用</h1>
-            <p>全部为专项模型，按专项进入闭环作业。</p>
+            <p>领域专项智能体，独立于具体审计项目；进入后先看职责、提示与数据来源，再跑模型。</p>
           </div>
         </div>
         <h2 class="section-hd">专项模型</h2>
         <div class="apps">
           <article class="app-card" data-view="app-portrait">
             <div class="app-ico">企</div>
-            <h3>企业画像</h3>
-            <p>工商、股权、经营、诉讼与审计关注点汇成一屏，并可生成体检报告。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>企业画像智能体</h3>
+            <p>职责：汇集工商股权经营诉讼，输出风险标签与体检。不绑定具体审计项目。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-supplier">
             <div class="app-ico">供</div>
-            <h3>供应商关联分析</h3>
-            <p>股权穿透、同一实控人、联系方式与地址撞库，识别隐性关联。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>供应商关联智能体</h3>
+            <p>职责：股权穿透、实控人与联系方式撞库，识别隐性关联与围标嫌疑组合。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-bid">
             <div class="app-ico">招</div>
-            <h3>招投标智能审计</h3>
-            <p>围标串标特征、评分异常、高频中标与合同履约偏差。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>招投标审计智能体</h3>
+            <p>职责：围标串标特征、评分异常、高频中标与履约偏差识别。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-contract">
             <div class="app-ico ico-amber">约</div>
-            <h3>合同审查应用</h3>
-            <p>条款抽取、多合同要素复核、付款合规与版本比对。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>合同审查智能体</h3>
+            <p>职责：条款抽取、多合同要素复核、付款合规与版本比对。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-risk">
             <div class="app-ico">险</div>
-            <h3>经营风险分析</h3>
-            <p>偿债、盈利质量、关联交易与资金链压力，输出风险雷达。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>经营风险智能体</h3>
+            <p>职责：偿债、盈利质量、关联交易与资金链压力雷达，前瞻预警。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-trade">
             <div class="app-ico">贸</div>
-            <h3>虚假贸易审计</h3>
-            <p>循环贸易、货物流与资金流错配、即进即出与通道业务识别。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>虚假贸易智能体</h3>
+            <p>职责：循环贸易、货物流与资金流错配、即进即出与通道业务识别。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-eng">
             <div class="app-ico">工</div>
-            <h3>工程审计专项</h3>
-            <p>合同包、变更签证、概算执行与结算比对，识别超概和拆分发包。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>工程审计智能体</h3>
+            <p>职责：合同包、变更签证、概算执行与结算比对，识别超概和拆分发包。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-policy-impl">
             <div class="app-ico ico-sky">策</div>
-            <h3>重大政策落实审计</h3>
-            <p>政策部署、资金配套与执行偏差跟踪，对接政策法规解读。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>政策落实智能体</h3>
+            <p>职责：政策部署、资金配套与执行偏差跟踪，对接政策法规解读。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-meeting">
             <div class="app-ico ico-sky">纪</div>
-            <h3>会议纪要分析</h3>
-            <p>对大量会议纪要进行综合分析，提炼决议、待办与未闭环事项。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>会议纪要智能体</h3>
+            <p>职责：综合分析纪要，提炼决议、待办与未闭环事项。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
           <article class="app-card" data-view="app-expense">
             <div class="app-ico">报</div>
-            <h3>报销合规</h3>
-            <p>对照报销制度核验单据，判断超标准、交叉列支与票事不符。</p>
-            <div class="foot"><span>专项模型</span><span>进入 →</span></div>
+            <h3>报销合规智能体</h3>
+            <p>职责：对照制度核验单据，判断超标准、交叉列支与票事不符。</p>
+            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
         </div>
       </section>
@@ -871,8 +756,8 @@
         <div class="crumbs"><button data-view="apps">智能专项应用</button> / 企业画像</div>
         <div class="page-head">
           <div>
-            <h1>企业画像</h1>
-            <p>海云信息科技有限公司 · 统一社会信用代码 91320000MA1XXXXX · 成立 2016</p>
+            <h1>企业画像智能体</h1>
+            <p>示例主体：海云信息科技有限公司 · 可切换任意经营主体进行分析</p>
           </div>
           <div>
             <button class="btn ghost sm" data-view="app-supplier">看关联</button>
@@ -1123,14 +1008,14 @@
         <div class="split">
           <aside class="card panel">
             <h2 style="font-size:15px;margin:0 0 12px">分析任务</h2>
-            <button class="model active" type="button"><b>提取三重一大未闭环决议</b><span>5 项未闭环</span></button>
+            <button class="model active" type="button"><b>提取预算调剂未闭环事项</b><span>5 项未闭环</span></button>
             <button class="model" type="button"><b>汇总对外投资议题</b><span>2024 年</span></button>
             <button class="model" type="button"><b>列出有资金无纪要的事项</b><span>8 项</span></button>
           </aside>
           <article class="card panel">
             <div class="result-block"><h4>纪要摘要</h4>41 次会议中，5 项对外投资/捐赠未形成闭环；8 项有资金流向但缺集体研究记录。</div>
             <div class="result-block"><h4>待办</h4>对外投资设立子公司 1,200 万缺董事会纪要。
-              <div style="margin-top:8px"><button class="btn ghost sm" type="button" data-view="assistant" data-scene="draft">让助手起草取证单</button></div>
+              <div style="margin-top:8px"><button class="btn ghost sm" type="button" data-view="assistant" data-scene="draft">让助手做发现取证智能体</button></div>
             </div>
           </article>
         </div>
@@ -1155,82 +1040,79 @@
           <article class="card panel">
             <div class="result-block"><h4>不合规 4 笔</h4>培训费与会议费交叉列支 27 万；两笔住宿超标准无说明；一张发票与出差审批单日期矛盾。</div>
             <div class="result-block"><h4>建议</h4>按制度生成退回清单，并转入问数核对科目。
-              <div style="margin-top:8px"><button class="btn sm" type="button" data-view="assistant" data-scene="talkdata">去问数</button></div>
+              <div style="margin-top:8px"><button class="btn sm" type="button" data-view="app-data">打开智能问数</button></div>
             </div>
           </article>
         </div>
       </section>
 
       <section class="view" id="app-data">
-        <div class="crumbs"><button data-view="apps">智能专项应用</button> / 审计数据资产</div>
+        <div class="crumbs"><button data-view="workbench">智能工作台</button> / 智能问数</div>
         <div class="page-head">
           <div>
-            <h1>审计数据资产</h1>
-            <p>数据体系、数据卡片上架与选数车。问数与模型计算都从这里取数。</p>
+            <h1>智能问数</h1>
+            <p>左侧选数据域，右侧对话取数；回复含结果、生成 SQL，并可沉淀为模型列表。</p>
           </div>
-          <span class="tag doing">选数车 9</span>
+          <span class="tag doing">对话模式</span>
         </div>
-        <div class="split">
+        <div class="split data-asset">
           <aside class="card panel">
-            <h2 style="font-size:15px;margin:0 0 8px">数据体系</h2>
-            <div class="data-tree">
-              <div>财务域</div>
-              <div>审计业务数据目录</div>
-              <div>营销域</div>
-              <div>工程域</div>
-              <div>供应链域</div>
-              <div>办公域</div>
-              <div>SAP（财务记账）</div>
+            <h2 style="font-size:15px;margin:0 0 8px">数据域</h2>
+            <div class="data-tree" id="data-domains">
+              <button type="button" class="active" data-domain="财务域">财务域</button>
+              <button type="button" data-domain="营销域">营销域</button>
+              <button type="button" data-domain="工程域">工程域</button>
+              <button type="button" data-domain="供应链域">供应链域</button>
+              <button type="button" data-domain="办公域">办公域</button>
+              <button type="button" data-domain="SAP（财务记账）">SAP（财务记账）</button>
+            </div>
+            <h2 style="font-size:15px;margin:16px 0 8px">模型列表 <span class="tag" id="data-model-count">0</span></h2>
+            <div class="data-model-list" id="data-model-list">
+              <p class="muted" style="font-size:12px;margin:0">问数后可将 SQL 沉淀为模型，列表在此展示。</p>
             </div>
           </aside>
-          <article class="card panel">
-            <div class="chip-row" style="margin-top:0">
-              <span class="tag ok">已授权 1</span>
-              <span class="tag warn">未授权 2</span>
+          <article class="card panel data-chat">
+            <div class="chat-hd" style="padding:0 0 12px;border-bottom:1px solid var(--line);margin-bottom:0">
+              <h2 style="margin:0;font-size:15px">问数对话</h2>
+              <span class="tag" id="data-domain-tag">财务域</span>
             </div>
-            <div class="cockpit-cards">
-              <div class="cockpit-card">
-                <h4>2026 年第一季度销…</h4>
-                <p>impstru_2026Q1Sales · 4,671 条 · 结构化导入</p>
-                <button class="btn sm" type="button" data-toast="已加入选数车">加入选数车</button>
-              </div>
-              <div class="cockpit-card">
-                <h4>2026 年第二季度销…</h4>
-                <p>未授权不可用</p>
-                <button class="btn ghost sm" type="button" data-toast="已提交授权申请">申请授权</button>
-              </div>
-              <div class="cockpit-card">
-                <h4>cw_auxiliary_acc…</h4>
-                <p>业务辅助核算 · 已授权</p>
-                <button class="btn sm" type="button" data-toast="已加入选数车">加入选数车</button>
+            <div class="msgs" id="data-msgs">
+              <div class="bubble ai">
+                <div class="result-block"><h4>智能问数</h4>
+                  已定位到「财务域」。直接提问即可返回结果，并自动形成 SQL；可将本次查询加入模型列表复用。
+                </div>
               </div>
             </div>
-            <table class="mt">
-              <thead><tr><th>数据卡片</th><th>目录</th><th>状态</th><th></th></tr></thead>
-              <tbody>
-                <tr><td>小表 ads_impstru_zh</td><td>审计数据贴源表</td><td>已上架</td><td><button class="btn ghost sm" type="button">同步结构</button></td></tr>
-                <tr><td>供应商交易明细</td><td>结构化导入</td><td>已上架</td><td><button class="btn ghost sm" type="button">同步结构</button></td></tr>
-              </tbody>
-            </table>
-            <button class="btn teal sm mt" type="button" data-view="assistant" data-scene="talkdata">用选数结果问数</button>
+            <div class="composer" style="border-top:1px solid var(--line);padding:12px 0 0;margin-top:0">
+              <textarea id="data-ask" placeholder="例如：2026 年一季度销售收入按供应商排名；会议费按月抽样"></textarea>
+              <button class="btn teal" id="data-send" type="button">发送</button>
+            </div>
           </article>
         </div>
       </section>
 
       <section class="view" id="app-knowledge">
-        <div class="crumbs"><button data-view="apps">智能专项应用</button> / 知识智库</div>
+        <div class="crumbs"><button data-view="workbench">智能工作台</button> / 知识智库</div>
         <div class="page-head">
           <div>
             <h1>知识智库</h1>
-            <p>审计事项库、法律法规库、内部问题库、外部案例库，供智搜与问审引用。</p>
+            <p>合并法规与政策检索、资料智搜：条款定性、项目资料与事项案例一体问答。</p>
           </div>
+          <span class="tag doing">对话模式</span>
         </div>
-        <div class="apps">
-          <article class="app-card" data-view="assistant" data-scene="law"><div class="app-ico">事</div><h3>审计事项库</h3><p>按预算执行、工程、内控、经责编排检查事项。</p><div class="foot"><span>1,200+</span><span>检索 →</span></div></article>
-          <article class="app-card" data-view="assistant" data-scene="law"><div class="app-ico">法</div><h3>法律法规库</h3><p>法规、内控制度、历史问题条款匹配。</p><div class="foot"><span>引用就绪</span><span>检索 →</span></div></article>
-          <article class="app-card" data-view="assistant" data-scene="report"><div class="app-ico">问</div><h3>内部问题库</h3><p>本机关历史发现与整改结果。</p><div class="foot"><span>本级</span><span>打开 →</span></div></article>
-          <article class="app-card" data-view="assistant" data-scene="mmsearch"><div class="app-ico">例</div><h3>外部案例库</h3><p>中石化、海运集团、能化监管等对标案例。</p><div class="foot"><span>示意</span><span>智搜 →</span></div></article>
-        </div>
+        <article class="card panel data-chat knowledge-full">
+          <div class="msgs" id="knowledge-msgs">
+            <div class="bubble ai">
+              <div class="result-block"><h4>全量问答</h4>
+                可直接问法规条款与定性口径，也可问项目资料（文本、表格、影像、录音）。系统在法规库、资料库与事项案例中综合作答，无需先选目录。
+              </div>
+            </div>
+          </div>
+          <div class="composer" style="border-top:1px solid var(--line);padding:12px 0 0;margin-top:0">
+            <textarea id="knowledge-ask" placeholder="例如：超概变更如何定性？签证单-07 在哪？围标串标有哪些典型特征？"></textarea>
+            <button class="btn teal" id="knowledge-send" type="button">发送</button>
+          </div>
+        </article>
       </section>
 
       <!-- 智能通用工具 -->
@@ -1269,7 +1151,7 @@
           <article class="tool" data-view="toolbox" data-tool="sign"><span class="tag">识别</span><h3>签章页识别</h3><p>定位签章页并抽取签署人。</p><span class="btn ghost sm">打开工作台</span></article>
           <article class="tool" data-view="toolbox" data-tool="qty"><span class="tag">工程</span><h3>工程量快速计算</h3><p>按图纸/清单估算工程量。</p><span class="btn ghost sm">打开工作台</span></article>
           <article class="tool" data-view="toolbox" data-tool="price"><span class="tag">工程</span><h3>材料价格查询</h3><p>对照信息价与认价。</p><span class="btn ghost sm">打开工作台</span></article>
-          <article class="tool" data-view="assistant" data-scene="law"><span class="tag">检索</span><h3>法规查询</h3><p>法规与内控条款匹配。</p><span class="btn ghost sm">打开工作台</span></article>
+          <article class="tool" data-view="app-knowledge"><span class="tag">检索</span><h3>法规与资料</h3><p>并入知识智库：法规条款与项目资料一体问答。</p><span class="btn ghost sm">打开知识智库</span></article>
         </div>
       </section>
 
@@ -1346,7 +1228,7 @@
         <div class="page-head">
           <div>
             <h1>智能开放平台</h1>
-            <p>把协审能力以 API、智能体和应用接入的方式对外开放，统一鉴权、计量与沙箱调试。</p>
+            <p>审计 AI 原生能力对外复用：API、智能体、数据血缘、模型治理与人机协同闭环。</p>
           </div>
           <div>
             <button class="btn ghost sm" type="button" data-toast="已复制开放平台文档地址">打开文档</button>
@@ -1354,7 +1236,7 @@
           </div>
         </div>
         <div class="stat-row">
-          <div class="stat card" style="padding:16px"><b>18</b><span>已发布能力</span></div>
+          <div class="stat card" style="padding:16px"><b>24</b><span>已发布能力</span></div>
           <div class="stat card" style="padding:16px"><b>6</b><span>接入应用</span></div>
           <div class="stat card" style="padding:16px"><b>12.4 万</b><span>本月调用</span></div>
           <div class="stat card" style="padding:16px"><b>99.6%</b><span>可用性</span></div>
@@ -1370,14 +1252,32 @@
           <article class="app-card">
             <div class="app-ico">口</div>
             <h3>能力目录</h3>
-            <p>问数、企业画像、报告生成、法规检索等 API 与配额。</p>
-            <div class="foot"><span>18 项</span><span>进入 →</span></div>
+            <p>问数、企业画像、监管预警、报告生成、法规检索等 API 与配额。</p>
+            <div class="foot"><span>24 项</span><span>进入 →</span></div>
           </article>
           <article class="app-card">
             <div class="app-ico">体</div>
             <h3>智能体上架</h3>
-            <p>把项目内智能体发布为可调用服务，支持版本与灰度。</p>
-            <div class="foot"><span>5 个在架</span><span>进入 →</span></div>
+            <p>把协审 / 专项 / 监管智能体发布为可调用服务，支持版本与灰度。</p>
+            <div class="foot"><span>9 个在架</span><span>进入 →</span></div>
+          </article>
+          <article class="app-card">
+            <div class="app-ico">缘</div>
+            <h3>数据血缘与口径</h3>
+            <p>指标口径字典、采集链路与可追溯证据包，支撑监管检查还原。</p>
+            <div class="foot"><span>AI 原生</span><span>进入 →</span></div>
+          </article>
+          <article class="app-card">
+            <div class="app-ico">模</div>
+            <h3>模型治理</h3>
+            <p>规则模型版本、阈值审批、误报回标与效果评估，避免黑箱预警。</p>
+            <div class="foot"><span>AI 原生</span><span>进入 →</span></div>
+          </article>
+          <article class="app-card">
+            <div class="app-ico">人</div>
+            <h3>人机协同与审计轨迹</h3>
+            <p>预警确认、退回、改派与底稿回写留痕；人审结论优先于模型。</p>
+            <div class="foot"><span>AI 原生</span><span>进入 →</span></div>
           </article>
           <article class="app-card">
             <div class="app-ico">箱</div>
@@ -1391,11 +1291,24 @@
             <p>按应用、能力、错误码统计调用量与时延。</p>
             <div class="foot"><span>本月 12.4 万</span><span>进入 →</span></div>
           </article>
-          <article class="app-card">
-            <div class="app-ico">文</div>
-            <h3>开发文档</h3>
-            <p>鉴权、限流、错误码与示例 SDK（Java / Python）。</p>
-            <div class="foot"><span>文档</span><span>进入 →</span></div>
+        </div>
+        <h2 class="section-hd">AI 原生落地补强</h2>
+        <div class="grid-2">
+          <article class="card panel">
+            <h2 style="font-size:15px;margin:0 0 10px">证据保险箱</h2>
+            <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0">模型命中自动归档原始表、截图与规则版本号，支持导出可复核证据包，满足「可执行、可监督、可追溯」。</p>
+          </article>
+          <article class="card panel">
+            <h2 style="font-size:15px;margin:0 0 10px">五自动闭环接口</h2>
+            <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0">采集—识别—预警—派单—督办 API 对齐穿透式监管平台建设节奏，可与集团风控 / 司库对接。</p>
+          </article>
+          <article class="card panel">
+            <h2 style="font-size:15px;margin:0 0 10px">提示词与知识分区</h2>
+            <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0">专项智能体、监管预警、企业预算执行分域知识库隔离，避免串域幻觉与口径污染。</p>
+          </article>
+          <article class="card panel">
+            <h2 style="font-size:15px;margin:0 0 10px">评测与红队</h2>
+            <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0">用历史已查实问题回放模型召回率 / 误报率；对虚假贸易、循环资金等红线场景做对抗样本。</p>
           </article>
         </div>
         <div class="split mt">
@@ -1447,6 +1360,6 @@
     </main>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="assets/app.js"></script>
+  <script src="assets/app.js?v=1602"></script>
 </body>
 </html>

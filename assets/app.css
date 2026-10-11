@@ -263,6 +263,8 @@ body.is-locked .access-gate {
   font: inherit;
 }
 .user:hover { color: #fff; }
+.user.is-guest { cursor: default; }
+.user.is-guest:hover { color: #c5d0d8; }
 .avatar {
   width: 30px;
   height: 30px;

@@ -1,4 +1,47 @@
-﻿const views = document.querySelectorAll(".view");
+﻿const ACCESS_KEY = "gaohong0930";
+const ACCESS_STORE = "audit_proto_access_v1";
+
+function isAccessUnlocked() {
+  try {
+    return sessionStorage.getItem(ACCESS_STORE) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function unlockAccess() {
+  try {
+    sessionStorage.setItem(ACCESS_STORE, "1");
+  } catch (_) {}
+  document.body.classList.remove("is-locked");
+}
+
+function initAccessGate() {
+  if (isAccessUnlocked()) {
+    document.body.classList.remove("is-locked");
+    return;
+  }
+  document.body.classList.add("is-locked");
+  const form = document.getElementById("access-form");
+  const input = document.getElementById("access-key");
+  const err = document.getElementById("access-error");
+  if (!form || !input) return;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const val = (input.value || "").trim();
+    if (val === ACCESS_KEY) {
+      if (err) err.hidden = true;
+      unlockAccess();
+      return;
+    }
+    if (err) err.hidden = false;
+    input.select();
+  });
+}
+
+initAccessGate();
+
+const views = document.querySelectorAll(".view");
 const navBtps = document.querySelectorAll(".nav-btn");
 const toastEl = document.getElementById("toast");
 

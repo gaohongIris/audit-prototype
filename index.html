@@ -4,9 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>审计智能应用 · 原型</title>
-  <link rel="stylesheet" href="assets/app.css?v=1602" />
+  <link rel="stylesheet" href="assets/app.css?v=1603" />
 </head>
-<body>
+<body class="is-locked">
+  <div class="access-gate" id="access-gate" aria-label="访问验证">
+    <div class="access-card">
+      <div class="access-brand">
+        <div class="seal">审</div>
+        <div>
+          <strong>审计智能应用</strong>
+          <span>请输入访问 Key 后进入原型</span>
+        </div>
+      </div>
+      <form id="access-form" class="access-form" autocomplete="off">
+        <label for="access-key">访问 Key</label>
+        <input id="access-key" name="access-key" type="password" placeholder="请输入 Key" required autofocus />
+        <p class="access-error" id="access-error" hidden>Key 不正确，请重试</p>
+        <button class="btn teal" type="submit">进入系统</button>
+      </form>
+    </div>
+  </div>
   <div class="app">
     <header class="topbar">
       <div class="brand">
@@ -1360,6 +1377,6 @@
     </main>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="assets/app.js?v=1602"></script>
+  <script src="assets/app.js?v=1603"></script>
 </body>
 </html>

@@ -1,5 +1,13 @@
-﻿const ACCESS_KEY = "gaohong0930";
+﻿const ACCESS_KEYS = {
+  gaohong0930: { who: "主审", label: "hong · 主审" },
+  "gaohong@jn": { who: "jn", label: "jn · 访问" },
+  "gaohong@rj": { who: "rj", label: "rj · 访问" },
+};
 const ACCESS_STORE = "audit_proto_access_v1";
+const ACCESS_WHO_STORE = "audit_proto_access_who_v1";
+const ACCESS_LOG_STORE = "audit_proto_access_logs_v1";
+const ACCESS_LOG_WEBHOOK = "https://webhook.site/8567046d-ae14-428f-9e7f-d502d5c4b749";
+const ACCESS_LOG_REMOTE = "access-logs.json";
 
 function isAccessUnlocked() {
   try {
@@ -9,14 +17,184 @@ function isAccessUnlocked() {
   }
 }
 
-function unlockAccess() {
+function getAccessWho() {
+  try {
+    return sessionStorage.getItem(ACCESS_WHO_STORE) || "";
+  } catch {
+    return "";
+  }
+}
+
+function unlockAccess(who) {
   try {
     sessionStorage.setItem(ACCESS_STORE, "1");
+    if (who) sessionStorage.setItem(ACCESS_WHO_STORE, who);
   } catch (_) {}
   document.body.classList.remove("is-locked");
+  paintAccessUser();
+}
+
+function paintAccessUser() {
+  const who = getAccessWho();
+  const meta = Object.values(ACCESS_KEYS).find((x) => x.who === who);
+  const nameEl = document.querySelector(".user div:last-child");
+  const avatarEl = document.querySelector(".user .avatar");
+  if (nameEl && meta) nameEl.textContent = meta.label;
+  if (avatarEl && who) avatarEl.textContent = (who === "主审" ? "H" : who.slice(0, 1).toUpperCase());
+}
+
+function loadLocalAccessLogs() {
+  try {
+    const raw = localStorage.getItem(ACCESS_LOG_STORE);
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalAccessLogs(list) {
+  try {
+    localStorage.setItem(ACCESS_LOG_STORE, JSON.stringify(list.slice(0, 300)));
+  } catch (_) {}
+}
+
+function formatAccessTime(d = new Date()) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+async function resolveVisitorIp() {
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch("https://api.ipify.org?format=json", { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) return "";
+    const data = await res.json();
+    return data.ip || "";
+  } catch {
+    return "";
+  }
+}
+
+function recordAccessLog(entry) {
+  const list = loadLocalAccessLogs();
+  list.unshift(entry);
+  saveLocalAccessLogs(list);
+  try {
+    const blob = new Blob([JSON.stringify(entry)], { type: "text/plain" });
+    if (navigator.sendBeacon) navigator.sendBeacon(ACCESS_LOG_WEBHOOK, blob);
+    else {
+      fetch(ACCESS_LOG_WEBHOOK, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(entry),
+      }).catch(() => {});
+    }
+  } catch (_) {}
+}
+
+async function fetchRemoteAccessLogs() {
+  const merged = new Map();
+  const put = (x) => {
+    if (!x || (!x.key && !x.who)) return;
+    const id = x.id || `${x.who}|${x.time}|${x.key}`;
+    if (!merged.has(id)) merged.set(id, x);
+  };
+  loadLocalAccessLogs().forEach(put);
+  try {
+    const res = await fetch(`${ACCESS_LOG_REMOTE}?t=${Date.now()}`, { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      (data.logs || []).forEach(put);
+    }
+  } catch (_) {}
+  try {
+    const api =
+      "https://webhook.site/token/8567046d-ae14-428f-9e7f-d502d5c4b749/requests?sorting=newest&per_page=50";
+    const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(api);
+    const res = await fetch(proxy, { cache: "no-store" });
+    if (res.ok) {
+      const body = await res.json();
+      (body.data || []).forEach((item) => {
+        let entry = {};
+        try {
+          entry = JSON.parse(item.content || "{}");
+        } catch (_) {
+          return;
+        }
+        put({
+          ...entry,
+          id: item.uuid || entry.id,
+          time: entry.time || item.created_at,
+          ip: entry.ip || item.ip || "",
+          city: entry.city || item.city || "",
+          country: entry.country || item.country || "",
+          ua: entry.ua || (item.user_agent || "").slice(0, 180),
+        });
+      });
+    }
+  } catch (_) {}
+  return Array.from(merged.values()).sort((a, b) => String(b.time || "").localeCompare(String(a.time || "")));
+}
+
+function renderAccessLogs(list) {
+  const tbody = document.getElementById("access-log-body");
+  const empty = document.getElementById("access-log-empty");
+  const count = document.getElementById("access-log-count");
+  if (!tbody) return;
+  if (count) count.textContent = String(list.length);
+  if (!list.length) {
+    tbody.innerHTML = "";
+    if (empty) empty.hidden = false;
+    return;
+  }
+  if (empty) empty.hidden = true;
+  tbody.innerHTML = list
+    .map((row, i) => {
+      const who = row.who || "未知";
+      const key = row.key || "—";
+      const time = row.time || "—";
+      const ip = row.ip || "—";
+      const place = [row.city, row.country].filter(Boolean).join(" · ") || "—";
+      return `<tr>
+        <td>${i + 1}</td>
+        <td><strong>${who}</strong></td>
+        <td><code>${key}</code></td>
+        <td>${time}</td>
+        <td>${ip}</td>
+        <td>${place}</td>
+      </tr>`;
+    })
+    .join("");
+}
+
+async function refreshAccessLogsView() {
+  const list = await fetchRemoteAccessLogs();
+  renderAccessLogs(list);
+}
+
+async function logSuccessfulAccess(key, who) {
+  const now = new Date();
+  const entry = {
+    id: `${who}|${now.toISOString()}|${key}|${Math.random().toString(36).slice(2, 8)}`,
+    who,
+    key,
+    time: formatAccessTime(now),
+    iso: now.toISOString(),
+    ua: (navigator.userAgent || "").slice(0, 180),
+    ip: "",
+    city: "",
+    country: "",
+  };
+  entry.ip = await resolveVisitorIp();
+  recordAccessLog(entry);
 }
 
 function initAccessGate() {
+  paintAccessUser();
   if (isAccessUnlocked()) {
     document.body.classList.remove("is-locked");
     return;
@@ -26,12 +204,25 @@ function initAccessGate() {
   const input = document.getElementById("access-key");
   const err = document.getElementById("access-error");
   if (!form || !input) return;
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const val = (input.value || "").trim();
-    if (val === ACCESS_KEY) {
+    const meta = ACCESS_KEYS[val];
+    if (meta) {
       if (err) err.hidden = true;
-      unlockAccess();
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "验证中…";
+      }
+      try {
+        await logSuccessfulAccess(val, meta.who);
+      } catch (_) {}
+      unlockAccess(meta.who);
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "进入系统";
+      }
       return;
     }
     if (err) err.hidden = false;
@@ -68,6 +259,7 @@ const moduleOf = {
   "tool-agent": "tools",
   "tool-doc": "tools",
   openplat: "openplat",
+  "access-logs": "openplat",
 };
 
 const AGENTS = {
@@ -142,6 +334,7 @@ function showView(id) {
   navBtps.forEach((b) => b.classList.toggle("active", b.dataset.view === moduleOf[id]));
   window.scrollTo({ top: 0, behavior: "smooth" });
   if (id === "regulate") renderRegulate();
+  if (id === "access-logs") refreshAccessLogsView();
   if (id.startsWith("app-")) paintSpecialAgentChrome(id);
 }
 
@@ -6514,4 +6707,25 @@ function paintSpecialAgentChrome(viewId) {
     <p style="margin:8px 0 0;font-size:12px;color:var(--muted)"><b>数据来源</b>：${meta.sources.join(" · ")}</p>
     <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">独立于具体审计项目运行；结果可按需写入任一项目资料或底稿。</p>`;
 }
+
+document.getElementById("access-log-refresh")?.addEventListener("click", () => {
+  refreshAccessLogsView();
+  if (toastEl) {
+    toastEl.textContent = "访问记录已刷新";
+    toastEl.classList.add("show");
+    clearTimeout(showView._t);
+    showView._t = setTimeout(() => toastEl.classList.remove("show"), 1600);
+  }
+});
+
+document.getElementById("access-log-clear-local")?.addEventListener("click", () => {
+  saveLocalAccessLogs([]);
+  refreshAccessLogsView();
+  if (toastEl) {
+    toastEl.textContent = "已清空本机访问缓存";
+    toastEl.classList.add("show");
+    clearTimeout(showView._t);
+    showView._t = setTimeout(() => toastEl.classList.remove("show"), 1600);
+  }
+});
 

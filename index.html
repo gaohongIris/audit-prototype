@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>审计智能应用 · 原型</title>
-  <link rel="stylesheet" href="assets/app.css?v=1605" />
+  <link rel="stylesheet" href="assets/app.css?v=1606" />
 </head>
 <body class="is-locked">
   <div class="access-gate" id="access-gate" aria-label="访问验证">
@@ -1354,7 +1354,7 @@
         <div class="page-head">
           <div>
             <h1>访问记录</h1>
-            <p>外网登录会记录访问者（按口令识别）、访问时间与大致 IP。共 <strong id="access-log-count">0</strong> 条。</p>
+            <p>仅统计有效口令登录；访问者由口令自动识别。共 <strong id="access-log-count">0</strong> 条。</p>
           </div>
           <div>
             <button class="btn ghost sm" type="button" id="access-log-refresh">刷新</button>
@@ -1384,7 +1384,7 @@
               <tbody id="access-log-body"></tbody>
             </table>
           </div>
-          <p class="muted access-log-empty" id="access-log-empty">暂无访问记录。他人外网登录后，约 10 分钟内同步到此处；也可点刷新。</p>
+          <p class="muted access-log-empty" id="access-log-empty">暂无有效访问记录。若仍看到旧数据，请点「清空本机缓存」后再刷新。</p>
         </article>
       </section>
 
@@ -1415,6 +1415,6 @@
     </main>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="assets/app.js?v=1605"></script>
+  <script src="assets/app.js?v=1606"></script>
 </body>
 </html>

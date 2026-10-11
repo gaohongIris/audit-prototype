@@ -1,10 +1,12 @@
 ﻿const ACCESS_KEYS = {
-  gaohong0930: { who: "主审", label: "hong · 主审" },
-  "gaohong@jn": { who: "jn", label: "jn · 访问" },
-  "gaohong@rj": { who: "rj", label: "rj · 访问" },
+  gaohong0930: { who: "主审", label: "hong · 主审", admin: true },
+  "gaohong@jn": { who: "jn", label: "jn · 访问", admin: false },
+  "gaohong@rj": { who: "rj", label: "rj · 访问", admin: false },
 };
+const ACCESS_ADMIN_KEY = "gaohong0930";
 const ACCESS_STORE = "audit_proto_access_v1";
 const ACCESS_WHO_STORE = "audit_proto_access_who_v1";
+const ACCESS_KEY_STORE = "audit_proto_access_key_v1";
 const ACCESS_LOG_STORE = "audit_proto_access_logs_v1";
 const ACCESS_LOG_WEBHOOK = "https://webhook.site/8567046d-ae14-428f-9e7f-d502d5c4b749";
 const ACCESS_LOG_REMOTE = "access-logs.json";
@@ -25,10 +27,25 @@ function getAccessWho() {
   }
 }
 
-function unlockAccess(who) {
+function getAccessKey() {
+  try {
+    return sessionStorage.getItem(ACCESS_KEY_STORE) || "";
+  } catch {
+    return "";
+  }
+}
+
+function isAccessAdmin() {
+  const key = getAccessKey();
+  if (key) return key === ACCESS_ADMIN_KEY || !!(ACCESS_KEYS[key] && ACCESS_KEYS[key].admin);
+  return getAccessWho() === "主审";
+}
+
+function unlockAccess(who, key) {
   try {
     sessionStorage.setItem(ACCESS_STORE, "1");
     if (who) sessionStorage.setItem(ACCESS_WHO_STORE, who);
+    if (key) sessionStorage.setItem(ACCESS_KEY_STORE, key);
   } catch (_) {}
   document.body.classList.remove("is-locked");
   paintAccessUser();
@@ -36,11 +53,24 @@ function unlockAccess(who) {
 
 function paintAccessUser() {
   const who = getAccessWho();
-  const meta = Object.values(ACCESS_KEYS).find((x) => x.who === who);
+  const meta = Object.values(ACCESS_KEYS).find((x) => x.who === who) || ACCESS_KEYS[getAccessKey()];
+  const userBtn = document.querySelector(".user");
   const nameEl = document.querySelector(".user div:last-child");
   const avatarEl = document.querySelector(".user .avatar");
   if (nameEl && meta) nameEl.textContent = meta.label;
-  if (avatarEl && who) avatarEl.textContent = (who === "主审" ? "H" : who.slice(0, 1).toUpperCase());
+  if (avatarEl && who) avatarEl.textContent = who === "主审" ? "H" : who.slice(0, 1).toUpperCase();
+  if (userBtn) {
+    if (isAccessAdmin()) {
+      userBtn.dataset.view = "access-logs";
+      userBtn.title = "查看访问记录";
+      userBtn.classList.remove("is-guest");
+    } else {
+      delete userBtn.dataset.view;
+      userBtn.removeAttribute("data-view");
+      userBtn.title = "";
+      userBtn.classList.add("is-guest");
+    }
+  }
 }
 
 function loadLocalAccessLogs() {
@@ -172,6 +202,10 @@ function renderAccessLogs(list) {
 }
 
 async function refreshAccessLogsView() {
+  if (!isAccessAdmin()) {
+    renderAccessLogs([]);
+    return;
+  }
   const list = await fetchRemoteAccessLogs();
   renderAccessLogs(list);
 }
@@ -218,7 +252,7 @@ function initAccessGate() {
       try {
         await logSuccessfulAccess(val, meta.who);
       } catch (_) {}
-      unlockAccess(meta.who);
+      unlockAccess(meta.who, val);
       if (btn) {
         btn.disabled = false;
         btn.textContent = "进入系统";
@@ -330,6 +364,15 @@ function renderAgent(key) {
 
 function showView(id) {
   if (!document.getElementById(id)) id = "workbench";
+  if (id === "access-logs" && !isAccessAdmin()) {
+    if (toastEl) {
+      toastEl.textContent = "当前账号无权查看访问记录";
+      toastEl.classList.add("show");
+      clearTimeout(showView._t);
+      showView._t = setTimeout(() => toastEl.classList.remove("show"), 1800);
+    }
+    id = "workbench";
+  }
   views.forEach((v) => v.classList.toggle("active", v.id === id));
   navBtps.forEach((b) => b.classList.toggle("active", b.dataset.view === moduleOf[id]));
   window.scrollTo({ top: 0, behavior: "smooth" });

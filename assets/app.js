@@ -7,9 +7,11 @@ const ACCESS_ADMIN_KEY = "gaohong0930";
 const ACCESS_STORE = "audit_proto_access_v1";
 const ACCESS_WHO_STORE = "audit_proto_access_who_v1";
 const ACCESS_KEY_STORE = "audit_proto_access_key_v1";
-const ACCESS_LOG_STORE = "audit_proto_access_logs_v1";
-const ACCESS_LOG_WEBHOOK = "https://webhook.site/8567046d-ae14-428f-9e7f-d502d5c4b749";
+const ACCESS_LOG_STORE = "audit_proto_access_logs_v2";
+const ACCESS_LOG_WEBHOOK_ID = "9e324136-c780-4014-92f6-37eaccc7d19b";
+const ACCESS_LOG_WEBHOOK = `https://webhook.site/${ACCESS_LOG_WEBHOOK_ID}`;
 const ACCESS_LOG_REMOTE = "access-logs.json";
+const ACCESS_TIME_RE = /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}/;
 
 function isAccessUnlocked() {
   try {
@@ -108,19 +110,66 @@ async function resolveVisitorIp() {
   }
 }
 
+function normalizeAccessLog(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const key = String(raw.key || "").trim();
+  const meta = ACCESS_KEYS[key];
+  if (!meta) return null;
+  let time = String(raw.time || "").trim();
+  if (!ACCESS_TIME_RE.test(time) && raw.iso) {
+    const d = new Date(raw.iso);
+    if (!Number.isNaN(d.getTime())) time = formatAccessTime(d);
+  }
+  if (!ACCESS_TIME_RE.test(time)) return null;
+  time = time.replace("T", " ").replace(/\.\d+Z?$/, "").slice(0, 19);
+  return {
+    id: `${key}|${time}`,
+    who: meta.who,
+    key,
+    time,
+    iso: raw.iso || "",
+    ip: String(raw.ip || "").trim(),
+    city: String(raw.city || "").trim(),
+    country: String(raw.country || "").trim(),
+    ua: String(raw.ua || "").slice(0, 180),
+  };
+}
+
+function mergeAccessLogPrefer(a, b) {
+  if (!a) return b;
+  if (!b) return a;
+  return {
+    ...a,
+    ...b,
+    who: a.who || b.who,
+    key: a.key || b.key,
+    time: a.time || b.time,
+    ip: a.ip || b.ip,
+    city: a.city || b.city,
+    country: a.country || b.country,
+    ua: a.ua || b.ua,
+    iso: a.iso || b.iso,
+    id: a.id || b.id,
+  };
+}
+
 function recordAccessLog(entry) {
-  const list = loadLocalAccessLogs();
-  list.unshift(entry);
-  saveLocalAccessLogs(list);
+  const clean = normalizeAccessLog(entry);
+  if (!clean) return;
+  const list = loadLocalAccessLogs().filter((x) => normalizeAccessLog(x));
+  const idx = list.findIndex((x) => x.id === clean.id || (x.key === clean.key && x.time === clean.time));
+  if (idx >= 0) list[idx] = mergeAccessLogPrefer(list[idx], clean);
+  else list.unshift(clean);
+  saveLocalAccessLogs(list.map(normalizeAccessLog).filter(Boolean));
   try {
-    const blob = new Blob([JSON.stringify(entry)], { type: "text/plain" });
+    const blob = new Blob([JSON.stringify(clean)], { type: "text/plain" });
     if (navigator.sendBeacon) navigator.sendBeacon(ACCESS_LOG_WEBHOOK, blob);
     else {
       fetch(ACCESS_LOG_WEBHOOK, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(entry),
+        body: JSON.stringify(clean),
       }).catch(() => {});
     }
   } catch (_) {}
@@ -128,10 +177,10 @@ function recordAccessLog(entry) {
 
 async function fetchRemoteAccessLogs() {
   const merged = new Map();
-  const put = (x) => {
-    if (!x || (!x.key && !x.who)) return;
-    const id = x.id || `${x.who}|${x.time}|${x.key}`;
-    if (!merged.has(id)) merged.set(id, x);
+  const put = (raw) => {
+    const x = normalizeAccessLog(raw);
+    if (!x) return;
+    merged.set(x.id, mergeAccessLogPrefer(merged.get(x.id), x));
   };
   loadLocalAccessLogs().forEach(put);
   try {
@@ -142,8 +191,7 @@ async function fetchRemoteAccessLogs() {
     }
   } catch (_) {}
   try {
-    const api =
-      "https://webhook.site/token/8567046d-ae14-428f-9e7f-d502d5c4b749/requests?sorting=newest&per_page=50";
+    const api = `https://webhook.site/token/${ACCESS_LOG_WEBHOOK_ID}/requests?sorting=newest&per_page=100`;
     const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(api);
     const res = await fetch(proxy, { cache: "no-store" });
     if (res.ok) {
@@ -155,10 +203,14 @@ async function fetchRemoteAccessLogs() {
         } catch (_) {
           return;
         }
+        let time = entry.time || "";
+        if (!ACCESS_TIME_RE.test(String(time)) && item.created_at) {
+          const d = new Date(String(item.created_at).replace(" ", "T") + "Z");
+          if (!Number.isNaN(d.getTime())) time = formatAccessTime(d);
+        }
         put({
           ...entry,
-          id: item.uuid || entry.id,
-          time: entry.time || item.created_at,
+          time,
           ip: entry.ip || item.ip || "",
           city: entry.city || item.city || "",
           country: entry.country || item.country || "",
@@ -167,7 +219,9 @@ async function fetchRemoteAccessLogs() {
       });
     }
   } catch (_) {}
-  return Array.from(merged.values()).sort((a, b) => String(b.time || "").localeCompare(String(a.time || "")));
+  const list = Array.from(merged.values()).sort((a, b) => String(b.time || "").localeCompare(String(a.time || "")));
+  saveLocalAccessLogs(list);
+  return list;
 }
 
 function renderAccessLogs(list) {
@@ -6762,6 +6816,10 @@ document.getElementById("access-log-refresh")?.addEventListener("click", () => {
 });
 
 document.getElementById("access-log-clear-local")?.addEventListener("click", () => {
+  try {
+    localStorage.removeItem("audit_proto_access_logs_v1");
+    localStorage.removeItem(ACCESS_LOG_STORE);
+  } catch (_) {}
   saveLocalAccessLogs([]);
   refreshAccessLogsView();
   if (toastEl) {
@@ -6771,4 +6829,5 @@ document.getElementById("access-log-clear-local")?.addEventListener("click", () 
     showView._t = setTimeout(() => toastEl.classList.remove("show"), 1600);
   }
 });
+
 

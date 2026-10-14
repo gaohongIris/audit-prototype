@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>审计智能应用 · 原型</title>
-  <link rel="stylesheet" href="assets/app.css?v=1606" />
+  <link rel="stylesheet" href="assets/app.css?v=1615" />
 </head>
 <body class="is-locked">
   <div class="access-gate" id="access-gate" aria-label="访问验证">
@@ -113,7 +113,7 @@
           <article class="app-card" data-view="app-data">
             <div class="app-ico">数</div>
             <h3>智能问数</h3>
-            <p>对话取数、抽样与多维对比。</p>
+            <p>与协审助手同一问数：对话取数、抽样、SQL 与模型沉淀。</p>
             <div class="foot"><span>问数</span><span>进入 →</span></div>
           </article>
         </div>
@@ -276,8 +276,17 @@
             <article class="app-card scene" data-scene="icmatrix"><div class="app-ico">矩</div><h3>内控矩阵</h3><p>导入内控手册与制度，抽取控制域、控制点，形成可评价矩阵。</p><div class="foot"><span>内控</span><span>进入 →</span></div></article>
           </div>
           <h2 class="section-hd">项目工作台</h2>
-          <div class="apps">
-            <article class="app-card scene" data-scene="cockpit"><div class="app-ico">台</div><h3>项目工作台</h3><p>上方保留阶段流程（含疑点/取证/底稿数量），下方对话统筹进度与跳转。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
+          <div class="apps apps-full">
+            <article class="app-card scene app-card-full" data-scene="cockpit">
+              <div class="app-ico">台</div>
+              <div class="app-card-body">
+                <h3>项目工作台</h3>
+                <p>上方保留阶段流程（含疑点/取证/底稿数量），下方对话统筹进度与跳转。</p>
+              </div>
+              <div class="foot"><span>对话</span><span>进入 →</span></div>
+            </article>
+          </div>
+          <div class="apps apps-3">
             <article class="app-card scene" data-scene="survey"><div class="app-ico">前</div><h3>审前调查智能体</h3><p>资料、画像、调查记录与问卷，生成含疑点的报告。</p><div class="foot"><span>已完成</span><span>进入 →</span></div></article>
             <article class="app-card scene" data-scene="scheme"><div class="app-ico">方</div><h3>方案制定智能体</h3><p>汇集审前调查、项目资料、历史方案与方案库，结合实施方案编制。</p><div class="foot"><span>已完成</span><span>进入 →</span></div></article>
             <article class="app-card scene" data-scene="doubt"><div class="app-ico">引</div><h3>审计指引智能体</h3><p>方案事项树、本下级内容、疑点个数与明细（已确认问题 / 无问题 / 待确认）。</p><div class="foot"><span>进行中</span><span>进入 →</span></div></article>
@@ -286,11 +295,11 @@
             <article class="app-card scene" data-scene="paper"><div class="app-ico">稿</div><h3>底稿智能体</h3><p>撰写指引与质量检查：做什么、查什么、要什么资料；检查定性与资料深度。</p><div class="foot"><span>底稿</span><span>进入 →</span></div></article>
             <article class="app-card scene" data-scene="report"><div class="app-ico">报</div><h3>报告生成智能体</h3><p>按项目底稿问题生成审计报告，并检查报告内容完整性。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
             <article class="app-card scene" data-scene="fieldpack"><div class="app-ico">资</div><h3>项目资料</h3><p>对话管理资料清单、缺件催收、访谈提纲与整改通知。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
-            <article class="app-card scene" data-scene="evidence"><div class="app-ico">证</div><h3>证据链管理</h3><p>资料、疑点、底稿、报告四段闭环。</p><div class="foot"><span>未进行</span><span>进入 →</span></div></article>
+            <article class="app-card scene" data-scene="evidence"><div class="app-ico">证</div><h3>证据链管理</h3><p>对话查看资料、疑点、底稿、报告四段闭环与缺环补证。</p><div class="foot"><span>对话</span><span>进入 →</span></div></article>
           </div>
           <h2 class="section-hd">问数</h2>
-          <div class="apps">
-            <article class="app-card scene" data-scene="talkdata"><div class="app-ico">数</div><h3>问数</h3><p>对话取数、分层抽样与差异估计。</p><div class="foot"><span>问数</span><span>进入 →</span></div></article>
+          <div class="apps apps-3">
+            <article class="app-card" data-view="app-data"><div class="app-ico">数</div><h3>智能问数</h3><p>与工作台同一问数：对话取数、抽样、SQL 与模型沉淀。</p><div class="foot"><span>问数</span><span>进入 →</span></div></article>
           </div>
         </div>
 
@@ -725,12 +734,6 @@
             <p>职责：合同包、变更签证、概算执行与结算比对，识别超概和拆分发包。</p>
             <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
           </article>
-          <article class="app-card" data-view="app-policy-impl">
-            <div class="app-ico ico-sky">策</div>
-            <h3>政策落实智能体</h3>
-            <p>职责：政策部署、资金配套与执行偏差跟踪，对接政策法规解读。</p>
-            <div class="foot"><span>专项智能体</span><span>进入 →</span></div>
-          </article>
           <article class="app-card" data-view="app-meeting">
             <div class="app-ico ico-sky">纪</div>
             <h3>会议纪要智能体</h3>
@@ -931,7 +934,6 @@
             <h1>工程审计专项</h1>
             <p>轨道交通 3 号线 · 合同包 128 · 变更 23 · 概算执行 112.6%</p>
           </div>
-          <button class="btn gold sm" data-view="toolbox" data-tool="qty">工程量快速计算</button>
         </div>
         <div class="split">
           <aside class="card panel">
@@ -1064,13 +1066,13 @@
       </section>
 
       <section class="view" id="app-data">
-        <div class="crumbs"><button data-view="workbench">智能工作台</button> / 智能问数</div>
+        <div class="crumbs"><button data-view="workbench">智能工作台</button> / <button data-view="assistant">协审智能助手</button> / 智能问数</div>
         <div class="page-head">
           <div>
             <h1>智能问数</h1>
-            <p>左侧选数据域，右侧对话取数；回复含结果、生成 SQL，并可沉淀为模型列表。</p>
+            <p>工作台与协审共用。左侧选数据域，右侧对话取数；回复含结果、生成 SQL，并可沉淀为模型列表。</p>
           </div>
-          <span class="tag doing">对话模式</span>
+          <span class="tag doing">对话模式 · 共用</span>
         </div>
         <div class="split data-asset">
           <aside class="card panel">
@@ -1165,8 +1167,6 @@
           <article class="tool" data-view="toolbox" data-tool="seal"><span class="tag">检测</span><h3>合同公章检测</h3><p>识别印章主体是否与签约方一致。</p><span class="btn ghost sm">打开工作台</span></article>
           <article class="tool" data-view="toolbox" data-tool="amount"><span class="tag">校验</span><h3>金额一致性校验</h3><p>合同、账套、结算金额三方核对。</p><span class="btn ghost sm">打开工作台</span></article>
           <article class="tool" data-view="toolbox" data-tool="dup"><span class="tag">检测</span><h3>重复项检测</h3><p>重复支付、重复报销、重复合同。</p><span class="btn ghost sm">打开工作台</span></article>
-          <article class="tool" data-view="toolbox" data-tool="sign"><span class="tag">识别</span><h3>签章页识别</h3><p>定位签章页并抽取签署人。</p><span class="btn ghost sm">打开工作台</span></article>
-          <article class="tool" data-view="toolbox" data-tool="qty"><span class="tag">工程</span><h3>工程量快速计算</h3><p>按图纸/清单估算工程量。</p><span class="btn ghost sm">打开工作台</span></article>
           <article class="tool" data-view="toolbox" data-tool="price"><span class="tag">工程</span><h3>材料价格查询</h3><p>对照信息价与认价。</p><span class="btn ghost sm">打开工作台</span></article>
           <article class="tool" data-view="app-knowledge"><span class="tag">检索</span><h3>法规与资料</h3><p>并入知识智库：法规条款与项目资料一体问答。</p><span class="btn ghost sm">打开知识智库</span></article>
         </div>
@@ -1368,6 +1368,7 @@
             <code>gaohong0930</code><em>主审</em>
             <code>gaohong@jn</code><em>jn</em>
             <code>gaohong@rj</code><em>rj</em>
+            <code>gaohong@czgx</code><em>czgx</em>
           </div>
           <div class="table-wrap">
             <table class="access-log-table">
@@ -1415,6 +1416,6 @@
     </main>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="assets/app.js?v=1606"></script>
+  <script src="assets/app.js?v=1615"></script>
 </body>
 </html>

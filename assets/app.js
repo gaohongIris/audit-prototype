@@ -2,6 +2,7 @@
   gaohong0930: { who: "主审", label: "hong · 主审", admin: true },
   "gaohong@jn": { who: "jn", label: "jn · 访问", admin: false },
   "gaohong@rj": { who: "rj", label: "rj · 访问", admin: false },
+  "gaohong@czgx": { who: "czgx", label: "czgx · 访问", admin: false },
 };
 const ACCESS_ADMIN_KEY = "gaohong0930";
 const ACCESS_STORE = "audit_proto_access_v1";
@@ -826,11 +827,10 @@ const COCKPIT = {
   },
   evidence: {
     title: "证据链管理",
-    status: "未进行",
-    pane: "evidence",
+    status: "对话",
     next: "cockpit",
     prev: "report",
-    input: "已确认疑点 · 穿透路径 · 抽样异常",
+    input: "资料 · 疑点 · 底稿 · 报告四段闭环",
     output: "",
   },
   paper: {
@@ -2690,7 +2690,7 @@ function cockpitPipeHtml() {
     <button class="pipe-step done" type="button" data-scene="scheme"><b>方案制定</b><span>已完成</span></button>
     <button class="pipe-step now" type="button" data-scene="doubt"><b>审计指引</b><span>${doubtSpan}</span></button>
     <button class="pipe-step" type="button" data-scene="draft"><b>发现取证</b><span>${draftSpan}</span></button>
-    <button class="pipe-step" type="button" data-scene="talkdata"><b>问数 / 抽样</b><span>可进入</span></button>
+    <button class="pipe-step" type="button" data-view="app-data"><b>问数 / 抽样</b><span>可进入</span></button>
     <button class="pipe-step" type="button" data-scene="interview"><b>访谈</b><span>对话</span></button>
     <button class="pipe-step" type="button" data-scene="paper"><b>底稿</b><span>${paperSpan}</span></button>
     <button class="pipe-step" type="button" data-scene="report"><b>报告生成</b><span>可进入</span></button>
@@ -2772,10 +2772,13 @@ function cockpitReplyHtml(text) {
       ${cockpitNextWorkHtml()}`;
   }
   if (/底稿|报告|证据|访谈|问数|抽样|调查|方案/i.test(t)) {
+    if (/问数|抽样/.test(t)) {
+      return `可以打开「智能问数」继续（与工作台同一入口）。
+        <div style="margin-top:8px"><button class="btn sm" type="button" data-view="app-data">进入智能问数</button></div>`;
+    }
     const map = [
       [/调查/, "survey", "审前调查"],
       [/方案/, "scheme", "方案制定"],
-      [/问数|抽样/, "talkdata", "问数 / 抽样"],
       [/访谈/, "interview", "访谈"],
       [/底稿/, "paper", "底稿智能体"],
       [/报告/, "report", "报告生成"],
@@ -4054,6 +4057,195 @@ const ASSIST_TOOLS = {
   icmatrix: { title: "内控矩阵", hint: "导入手册与制度，抽取控制域和控制点。" },
 };
 
+/** 证据链管理：对话查看四段闭环与缺环补证 */
+const evidenceState = {
+  started: false,
+  exported: false,
+  packSent: false,
+};
+
+const EVIDENCE_CHAIN = [
+  {
+    id: "E-03",
+    title: "运维成果物缺失",
+    docs: { label: "已归档", tag: "ok" },
+    doubt: { label: "已确认", tag: "ok" },
+    paper: { label: "草稿", tag: "warn" },
+    report: { label: "未入", tag: "" },
+    gap: "底稿待主审签字",
+  },
+  {
+    id: "E-07",
+    title: "往来款体外循环",
+    docs: { label: "已归档", tag: "ok" },
+    doubt: { label: "待穿行", tag: "warn" },
+    paper: { label: "未编", tag: "" },
+    report: { label: "未入", tag: "" },
+    gap: "缺资金流截图；疑点待穿行；底稿未编",
+  },
+  {
+    id: "E-11",
+    title: "车站装修超概",
+    docs: { label: "签证不齐", tag: "warn" },
+    doubt: { label: "已确认", tag: "ok" },
+    paper: { label: "已审核", tag: "ok" },
+    report: { label: "已写入", tag: "doing" },
+    gap: "缺 2 份变更审批",
+  },
+];
+
+function evidenceGapItems() {
+  return EVIDENCE_CHAIN.filter((x) => {
+    const docsOk = x.docs.tag === "ok";
+    const doubtOk = x.doubt.tag === "ok";
+    const paperOk = x.paper.tag === "ok";
+    const reportOk = x.report.tag === "ok" || x.report.tag === "doing";
+    return !(docsOk && doubtOk && paperOk && reportOk) || !!x.gap;
+  });
+}
+
+function evidenceStatsLine() {
+  const gap = evidenceGapItems();
+  const closed = EVIDENCE_CHAIN.length - gap.length;
+  return `事项 ${EVIDENCE_CHAIN.length} · 闭环 ${Math.max(0, closed)} · 缺环 ${gap.length}${evidenceState.packSent ? " · 已生成补证清单" : ""}${evidenceState.exported ? " · 已导出" : ""}`;
+}
+
+function evidenceMenuHtml() {
+  return `<div class="scheme-prompts" style="margin-top:10px">
+      <button type="button" data-evidence-prompt="list">证据链清单</button>
+      <button type="button" data-evidence-prompt="gap">缺环事项</button>
+      <button type="button" data-evidence-prompt="pack">生成补证清单</button>
+      <button type="button" data-evidence-prompt="stage">按环节查看</button>
+      <button type="button" data-evidence-prompt="export">导出证据链</button>
+    </div>`;
+}
+
+function evidenceListHtml() {
+  const rows = EVIDENCE_CHAIN.map(
+    (x) => `<tr>
+      <td>${escapeHtml(x.id)}</td>
+      <td>${escapeHtml(x.title)}</td>
+      <td><span class="tag ${x.docs.tag || ""}">${escapeHtml(x.docs.label)}</span></td>
+      <td><span class="tag ${x.doubt.tag || ""}">${escapeHtml(x.doubt.label)}</span></td>
+      <td><span class="tag ${x.paper.tag || ""}">${escapeHtml(x.paper.label)}</span></td>
+      <td><span class="tag ${x.report.tag || ""}">${escapeHtml(x.report.label)}</span></td>
+    </tr>`
+  ).join("");
+  return `<table>
+      <thead><tr><th>编号</th><th>事项</th><th>资料</th><th>疑点</th><th>底稿</th><th>报告</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function seedEvidenceChat() {
+  evidenceState.started = true;
+  msgs.innerHTML = `
+    <div class="bubble ai">
+      您好，欢迎使用<strong>证据链管理</strong>。可对话查看资料、疑点、底稿、报告四段闭环，识别缺环并生成补证清单。
+      ${evidenceMenuHtml()}
+      <div class="result-block" style="margin-top:10px"><h4>本阶段概览</h4>${evidenceStatsLine()}
+        <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">缺环项标红便于主审补证；可跳转项目资料、底稿或报告继续闭环。</p>
+      </div>
+      <div class="cite">证据链 · 资料 / 疑点 / 底稿 / 报告</div>
+    </div>`;
+  msgs.scrollTop = 0;
+}
+
+function evidenceReplyHtml(text) {
+  const raw = (text || "").trim();
+
+  if (/证据链清单|清单|总览|全部事项|有哪些/i.test(raw) || raw === "证据链清单") {
+    return `当前证据链事项如下（资料 → 疑点 → 底稿 → 报告）。
+      <div class="result-block" style="margin-top:10px"><h4>证据链清单</h4>${evidenceListHtml()}</div>
+      <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">${evidenceStatsLine()}</p>
+      ${evidenceMenuHtml()}`;
+  }
+
+  if (/缺环|缺口|未闭环|风险项/i.test(raw) || raw === "缺环事项") {
+    const gap = evidenceGapItems();
+    return `已识别缺环 / 未完全闭环 <b>${gap.length}</b> 项。
+      <div class="result-block"><h4>缺环事项</h4>
+        ${gap.map((x) => `· <b>${escapeHtml(x.id)}</b> ${escapeHtml(x.title)} — ${escapeHtml(x.gap || "环节未齐")}`).join("<br />")}
+      </div>
+      <div class="scheme-prompts">
+        <button type="button" data-evidence-prompt="pack">生成补证清单</button>
+        <button type="button" data-scene="fieldpack">去项目资料</button>
+        <button type="button" data-scene="paper">去编写底稿</button>
+      </div>
+      ${evidenceMenuHtml()}`;
+  }
+
+  if (/补证|补齐|生成补证/i.test(raw) || raw === "生成补证清单") {
+    evidenceState.packSent = true;
+    const gap = evidenceGapItems();
+    return `已生成补证清单（示意可并入项目资料发给被审计单位）。
+      <div class="result-block"><h4>补证清单</h4>
+        ${gap.map((x, i) => `${i + 1}. ${escapeHtml(x.id)} ${escapeHtml(x.title)}：${escapeHtml(x.gap || "请补齐未闭环环节")}`).join("<br />")}
+      </div>
+      <div class="result-block"><h4>要求</h4>请于 <b>5 个工作日</b>内补交原件或扫描件；E-07 资金流截图、E-11 变更审批为重点催收项。</div>
+      <div class="scheme-prompts">
+        <button type="button" data-scene="fieldpack">并入项目资料</button>
+        <button type="button" data-scene="paper">去编写底稿</button>
+      </div>
+      ${evidenceMenuHtml()}`;
+  }
+
+  if (/按环节|四段|资料环节|疑点环节|底稿环节|报告环节/i.test(raw) || raw === "按环节查看") {
+    const stage = (key, title) => {
+      const rows = EVIDENCE_CHAIN.map(
+        (x) => `· ${escapeHtml(x.id)} ${escapeHtml(x.title)}：<span class="tag ${x[key].tag || ""}">${escapeHtml(x[key].label)}</span>`
+      ).join("<br />");
+      return `<div class="result-block"><h4>${title}</h4>${rows}</div>`;
+    };
+    return `按四段环节汇总如下。
+      ${stage("docs", "资料")}
+      ${stage("doubt", "疑点")}
+      ${stage("paper", "底稿")}
+      ${stage("report", "报告")}
+      ${evidenceMenuHtml()}`;
+  }
+
+  if (/导出|下载|打包/i.test(raw) || raw === "导出证据链") {
+    evidenceState.exported = true;
+    return `已导出证据链台账（示意）：<b>XX集团2025企业预算执行_证据链.xlsx</b>
+      <div class="result-block"><h4>含</h4>事项清单 · 四段状态 · 缺环说明 · 补证清单</div>
+      <div class="scheme-prompts">
+        <button type="button" data-scene="report">回报告生成</button>
+        <button type="button" data-scene="cockpit">回项目工作台</button>
+      </div>
+      ${evidenceMenuHtml()}`;
+  }
+
+  if (/E-03|运维成果物/i.test(raw)) {
+    const x = EVIDENCE_CHAIN[0];
+    return `<b>${escapeHtml(x.id)}</b> ${escapeHtml(x.title)} 当前状态：资料 ${escapeHtml(x.docs.label)} · 疑点 ${escapeHtml(x.doubt.label)} · 底稿 ${escapeHtml(x.paper.label)} · 报告 ${escapeHtml(x.report.label)}。
+      <div class="result-block"><h4>缺口</h4>${escapeHtml(x.gap)}</div>
+      <div class="scheme-prompts"><button type="button" data-scene="paper">去编写底稿</button></div>
+      ${evidenceMenuHtml()}`;
+  }
+  if (/E-07|往来款|体外循环/i.test(raw)) {
+    const x = EVIDENCE_CHAIN[1];
+    return `<b>${escapeHtml(x.id)}</b> ${escapeHtml(x.title)} 当前状态：资料 ${escapeHtml(x.docs.label)} · 疑点 ${escapeHtml(x.doubt.label)} · 底稿 ${escapeHtml(x.paper.label)} · 报告 ${escapeHtml(x.report.label)}。
+      <div class="result-block"><h4>缺口</h4>${escapeHtml(x.gap)}</div>
+      <div class="scheme-prompts">
+        <button type="button" data-scene="doubt">去审计指引穿行</button>
+        <button type="button" data-scene="fieldpack">催收资金流截图</button>
+      </div>
+      ${evidenceMenuHtml()}`;
+  }
+  if (/E-11|车站装修|超概/i.test(raw)) {
+    const x = EVIDENCE_CHAIN[2];
+    return `<b>${escapeHtml(x.id)}</b> ${escapeHtml(x.title)} 当前状态：资料 ${escapeHtml(x.docs.label)} · 疑点 ${escapeHtml(x.doubt.label)} · 底稿 ${escapeHtml(x.paper.label)} · 报告 ${escapeHtml(x.report.label)}。
+      <div class="result-block"><h4>缺口</h4>${escapeHtml(x.gap)}</div>
+      <div class="scheme-prompts"><button type="button" data-scene="fieldpack">催收变更审批</button></div>
+      ${evidenceMenuHtml()}`;
+  }
+
+  return `可在对话中管理<strong>证据链</strong>：查看清单、识别缺环、生成补证清单并导出。
+    <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">${evidenceStatsLine()}</p>
+    ${evidenceMenuHtml()}`;
+}
+
 /** 项目资料：对话管理资料清单、缺件催收、提纲与整改通知 */
 const fieldpackState = {
   started: false,
@@ -4252,6 +4444,15 @@ function ctxHtml(scene) {
       <button class="btn ghost sm" type="button" data-fieldpack-prompt="gap">缺件催收</button>
       <button class="btn ghost sm" type="button" data-fieldpack-prompt="export">导出资料</button>`;
   }
+  if (scene === "evidence") {
+    const gap = evidenceGapItems().length;
+    return `<h3>证据链管理</h3>
+      <div class="chip-row"><span class="tag doing">对话模式</span><span class="tag doing">事项 ${EVIDENCE_CHAIN.length}</span><span class="tag risk">缺环 ${gap}</span>${evidenceState.packSent ? `<span class="tag ok">已生成补证</span>` : ""}${evidenceState.exported ? `<span class="tag ok">已导出</span>` : ""}</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 10px;">资料、疑点、底稿、报告四段闭环；缺环可生成补证清单并跳转资料/底稿。</p>
+      <button class="btn sm" type="button" data-evidence-prompt="list">证据链清单</button>
+      <button class="btn ghost sm" type="button" data-evidence-prompt="gap">缺环事项</button>
+      <button class="btn ghost sm" type="button" data-evidence-prompt="pack">生成补证清单</button>`;
+  }
   if (scene === "scheme") {
     return `<h3>编制依据</h3>
       <div class="chip-row"><span class="tag doing">方案检查</span><span class="tag ai">完整性 / 分工</span>${detectChip}</div>
@@ -4372,6 +4573,10 @@ function setScene(scene) {
     showView("app-knowledge");
     return;
   }
+  if (scene === "talkdata") {
+    showView("app-data");
+    return;
+  }
   currentScene = scene;
   document.querySelectorAll(".scene").forEach((b) => b.classList.toggle("active", b.dataset.scene === scene));
   const doubtAiBtn = document.getElementById("doubt-ai-btn");
@@ -4417,6 +4622,13 @@ function setScene(scene) {
   if (ASSIST_TOOLS[scene]) {
     showPane(scene);
     paneTitle.textContent = ASSIST_TOOLS[scene].title;
+    return;
+  }
+  if (scene === "evidence") {
+    showPane("chat");
+    paneTitle.textContent = "证据链管理";
+    ask.placeholder = "例如：证据链清单 / 缺环事项 / 生成补证清单 / 按环节查看";
+    seedEvidenceChat();
     return;
   }
   if (scene === "fieldpack") {
@@ -5535,6 +5747,8 @@ function reply(text) {
     ai.innerHTML = reportReplyHtml(text);
   } else if (currentScene === "fieldpack") {
     ai.innerHTML = fieldpackReplyHtml(text);
+  } else if (currentScene === "evidence") {
+    ai.innerHTML = evidenceReplyHtml(text);
   } else if (currentScene === "talkdata") {
     ai.innerHTML = talkReplyHtml(text);
   } else {
@@ -5696,6 +5910,18 @@ document.body.addEventListener("click", (e) => {
       export: "导出资料",
     };
     reply(map[fieldpackPrompt.dataset.fieldpackPrompt] || fieldpackPrompt.textContent.trim());
+    return;
+  }
+  const evidencePrompt = e.target.closest("[data-evidence-prompt]");
+  if (evidencePrompt) {
+    const map = {
+      list: "证据链清单",
+      gap: "缺环事项",
+      pack: "生成补证清单",
+      stage: "按环节查看",
+      export: "导出证据链",
+    };
+    reply(map[evidencePrompt.dataset.evidencePrompt] || evidencePrompt.textContent.trim());
     return;
   }
   const schemePrompt = e.target.closest("[data-scheme-prompt]");
